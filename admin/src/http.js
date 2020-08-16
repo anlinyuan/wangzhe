@@ -3,7 +3,8 @@ import Vue from 'vue'
 import router from './router'
 
 const http = axios.create({
-    baseURL:' http://localhost:8080/admin/api',
+    baseURL:process.env.VUE_APP_API_URL || '/admin/api',
+    // baseURL:' http://localhost:8080/admin/api',
 })
 //请求头加上Authorization，值为'Bearer '+ localStorage.token
 http.interceptors.request.use(function (config) {
