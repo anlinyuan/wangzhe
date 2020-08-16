@@ -9,6 +9,8 @@ app.set('secret',"1234idsnoi")
 app.use(express.json())
 //静态文件
 app.use('/uploads',express.static(__dirname+'/uploads'))
+app.use('/admin',express.static(__dirname+'/admin'))
+app.use('/',express.static(__dirname+'/web'))
 
 require('./plugins/dp')(app)
 require('./routes/admin')(app)
