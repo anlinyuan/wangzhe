@@ -1,0 +1,62 @@
+//color 变量
+//定义的属性与原来有冲突时，用“”，"white":#fff
+$colors:(
+    "primary":#db9e3f,
+    "danger":#791a15,
+    "blue-2":#1f3695,
+    "blue-1":#4394e4,
+    "blue":#1e96ab,
+    "info":#4b67af,
+    "white":#fff,
+    "light":#f9f9f9,
+    "light-1":#d4d9de,
+    "grey":#999,
+    "grey-1":#666,
+    "dark-1":#343440,
+    "dark":#222,
+    "black":#000,
+);
+//边框颜色
+$border-color: map-get($colors, 'light-1');
+
+//font size
+$base-font-size:1rem;//13px
+$font-size:(
+    xxs:0.6154,
+    xs:0.7692,//10px
+    sm:0.9231,//12px
+    md:1,//13px
+    lg:1.0769,//14px
+    xl:1.2308,//16px
+);
+
+//设定主轴对其方式(竖)
+$flex-jc:(
+    "start":flex-start,
+    "end":flex-end,
+    "center":center,
+    "between":space-between,
+    "around":space-around
+);
+
+$flex-ai:(
+    "start":flex-start,
+    "end":flex-end,
+    "center":center,
+    "stretch":stretch,//交叉轴等高
+);
+
+//spacing 定义边距
+//0-5等级
+//mt-1 margin-top 1级
+$spacing-types:(m:margin,p:padding);
+$spacing-directions:(t:top,r:right,b:bottom,l:left);
+$spacing-base-size:1rem;
+$spacing-sizes:(
+    0:0,
+    1:0.25,
+    2:0.5,
+    3:1,
+    4:1.5,
+    5:3
+);
