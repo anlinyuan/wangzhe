@@ -65,7 +65,7 @@ module.exports = app =>{
     const multer = require('multer')
     const MAO = require('multer-aliyun-oss');
     //dirname绝对地址
-    const upload = multer({
+    const upload = multer({ 
         // dest:__dirname+'/../../uploads'
         storage:MAO({
             config:{
