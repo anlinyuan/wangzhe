@@ -16,12 +16,19 @@
     <div class="nav-icons bg-white mt-3 text-center pt-3 text-dark-1">
       <div class="d-flex flex-wrap">
         <!-- css图片精灵优化 -->
-        <div class="nav-item mb-3" v-for="n in 10" :key="n">
-          <i class="sprite sprite-news"></i>
-          <div class="py-2">爆料站</div>
+        <div class="nav-item mb-3" v-for="(items,index) in navItems" :key="index">
+          <i class="sprite" :class="`${items.icon}`"></i>
+          <div class="py-2">{{items.name}}</div>
         </div>
       </div>
-      <div class="bg-light py-2 fs-sm">
+
+      <div class="d-flex flex-wrap" v-if="flag">
+        <div class="nav-item mb-3" v-for="(items,index) in MoreNavItems" :key="index">
+          <i class="sprite" :class="`${items.icon}`"></i>
+          <div class="py-2">{{items.name}}</div>
+        </div>
+      </div>
+      <div class="bg-light py-2 fs-sm" @click="flag = flag?false:true"> 
         <i class="sprite sprite-arrow mr-1"></i>
         <span>收起</span>
       </div>
@@ -74,11 +81,49 @@ export default {
   },
   data() {
     return{
+      flag:false,
         swiperOption: {
-        pagination: ".pagination-home",
+          pagination: {
+            el:".pagination-home"
+            },
+          observer:true,//修改swiper自己或子元素时，自动初始化swiper 
+          observeParents:true,//修改swiper的父元素时，自动初始化swiper 
+          loop:true,
+          autoplay: {
+            delay: 2000,
+            disableOnInteraction: false
+          }
       },
       newsCats:[],
-      heroCats:[]
+      heroCats:[],
+      navItems:[{
+        name:"爆料站",
+        icon:"sprite-news",
+      },{
+        name:"故事站",
+        icon:"sprite-news",
+      },{
+        name:"周边商城",
+        icon:"sprite-news",
+      },
+      {
+        name:"体验服",
+        icon:"sprite-news",
+      }],
+      MoreNavItems:[{
+        name:"爆料站",
+        icon:"sprite-news",
+      },{
+        name:"故事站",
+        icon:"sprite-news",
+      },{
+        name:"周边商城",
+        icon:"sprite-news",
+      },
+      {
+        name:"体验服",
+        icon:"sprite-news",
+      }],
     }
   },
   methods:{
