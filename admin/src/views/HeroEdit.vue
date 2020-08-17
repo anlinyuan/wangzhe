@@ -81,10 +81,10 @@
                     <el-input type="textarea" v-model="model.usageTips"></el-input>
                 </el-form-item>
                 <el-form-item label="对抗技巧">
-                    <el-input type="textarea" v-model="model.battleTips"></el-input>
+                    <el-input type="textarea" v-model="model.battleTipes"></el-input>
                 </el-form-item>
                 <el-form-item label="团战思路">
-                    <el-input type="textarea" v-model="model.teamTips"></el-input>
+                    <el-input type="textarea" v-model="model.teamTipes"></el-input>
                 </el-form-item>
             </el-tab-pane>
 

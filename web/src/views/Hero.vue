@@ -30,6 +30,19 @@
         </div>
       </div>
     </div>
+
+    <div class="pt-3 pb-2 border-bottom">
+      <div class="nav pb-1 jc-around">
+        <div class="nav-item active">
+          <router-link class="nav-link" tag="div" :to="`/heroes/${id}`">英雄初识</router-link>
+        </div>
+        <div class="nav-item">
+          <router-link class="nav-link" tag="div" to="/">进阶攻略</router-link>
+        </div>
+      </div>
+    </div>
+
+    <div>{{this.model.skills}}</div>
   </div>
 </template>
 <script>
