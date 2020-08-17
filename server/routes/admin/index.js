@@ -63,11 +63,22 @@ module.exports = app =>{
    
     //上传数据
     const multer = require('multer')
+    const MAO = require('multer-aliyun-oss');
     //dirname绝对地址
-    const upload = multer({dest:__dirname+'/../../uploads'})
+    const upload = multer({
+        // dest:__dirname+'/../../uploads'
+        storage:MAO({
+            config:{
+                region:"oss-cn-shenzhen",
+                accessKeyId:"LTAI4GGfoAGAyAgAYCS4j9v1",
+                accessKeySecret:"k165wmUnAoMFtkQFO52pIqBZz1XWe0",
+                bucket:"wangzhe-ly"
+            }
+        })
+    })
     app.post('/admin/api/upload',authMiddleware(),upload.single('file'), async(req,res)=>{
         const file = req.file
-        file.url = `http://test.alinyuan.com/uploads/${file.filename}`
+        // file.url = `http://test.alinyuan.com/uploads/${file.filename}`
         res.send(file)
     })
 
