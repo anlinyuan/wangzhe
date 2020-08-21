@@ -156,7 +156,7 @@ router.get('/articles/:id',async (req,res)=>{
 router.get('/heroes/:id',async (req,res)=>{
   const data = await Hero
     .findById(req.params.id)
-    .populate('categories')//关联取出分类
+    .populate('categories items1 items2')//关联取出分类
     .lean()
   res.send(data)
 })

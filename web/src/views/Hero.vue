@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="pt-3 pb-1 border-bottom">
+    <div class="pt-3 pb-1 border-bottom bg-white">
       <div class="nav pb-1 jc-around">
         <div class="nav-item active">
           <router-link class="nav-link" tag="div" :to="`/heroes/${id}`">英雄初识</router-link>
@@ -41,35 +41,63 @@
         </div>
       </div>
     </div>
-
-    <div class="d-flex mx-2 my-3">
-      <div class="border-btn flex-1 px-4 py-3 d-flex jc-center mr-1">
+    <div class="bg-white">
+      <div class="d-flex px-2 py-4 jc-around">
+        <div class="border-btn flex-1 px-4 py-3 d-flex jc-center ">
+            <i class="iconfont icon-cc-menu-circle text-primary fs-xxl text-weight"></i>
+            <span class="pl-2">英雄介绍视频</span>
+        </div>
+        <div class="border-btn flex-1 px-4 py-3 mx-1 fs-md d-flex jc-center">
           <i class="iconfont icon-cc-menu-circle text-primary fs-xxl text-weight"></i>
-          <span class="pl-2">英雄介绍视频</span>
-      </div>
-      <div class="border-btn flex-1 px-4 py-3 mx-1 fs-md d-flex jc-center">
-        <i class="iconfont icon-cc-menu-circle text-primary fs-xxl text-weight"></i>
-        <span class="pl-2">一图识英雄</span>       
+          <span class="pl-2">一图识英雄</span>       
+        </div>
       </div>
     </div>
+
     
-    <div class="nav-photo">
-      <ul style="display:flex">
+    <div class="nav-photo bg-white">
+      <ul class="d-flex" style="margin:0">
         <li v-for="(skillPhoto,index) in model.skills" :key="index" 
         @click="flag=index" class="flex-1 mx-3" >
           <img :src="skillPhoto.icon" alt="" class="w-100 nav-photo-item" :class="{active:flag===index}">
         </li>
       </ul>
-      <ul>
+      <ul class="mx-3 my-4">
         <li>
-          <div>
-            <span>{{model.skills[flag].name}}</span>
-            <span>{{model.skills[flag].delay}},{{model.skills[flag].cost}}</span>
+          <div class="mb-2">
+            <span class="text-weight fs-xl">{{model.skills[flag].name}}</span>
+            <span class="px-4 text-grey-2">(冷却值：{{model.skills[flag].delay}},消耗：{{model.skills[flag].cost}}）</span>
           </div>
-          <p>{{model.skills[flag].description}}</p>
+          <p class="pb-2">{{model.skills[flag].description}}</p>
           <p></p>
         </li>
       </ul>
+    </div>
+
+    <m-card icon="cc-menu-circle" title="出装推荐">
+      <div>
+        <p class="m-0 fs-lg">顺风出装</p>
+        <div class="d-flex border-bottom mb-2">
+          <div v-for="(item1,index) in model.items1" :key=index 
+          class="jc-between flex-1 text-ellipsis px-2 pt-1 ">
+            <img :src="item1.icon" alt="" class="w-100 hero-item">
+            <p class="text-center m-0 fs-xs pb-2">{{item1.name}}</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="m-0 fs-lg">逆风出装</p>
+        <div class="d-flex ">
+          <div v-for="(item2,index) in model.items2" :key=index 
+          class="jc-between flex-1 text-ellipsis px-2 pt-1">
+            <img :src="item2.icon" alt="" class="w-100 hero-item">
+            <p class="text-center m-0 fs-xs">{{item2.name}}</p>
+          </div>
+        </div>
+      </div>
+    </m-card>
+    <div>
+  
     </div>
   </div>
 </template>
@@ -132,6 +160,13 @@ export default {
       padding:0;
       list-style: none
     }
+  }
+
+  .hero-item{
+    width:3.9rem;
+    height:3.9rem;
+    border: 1px solid rgba(0,0,0,0);
+    border-radius:50%
   }
 }
 </style>
