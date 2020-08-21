@@ -70,8 +70,8 @@ module.exports = app =>{
         storage:MAO({
             config:{
                 region:"oss-cn-shenzhen",
-                accessKeyId:"LTAI4GGfoAGAyAgAYCS4j9v1",
-                accessKeySecret:"k165wmUnAoMFtkQFO52pIqBZz1XWe0",
+                accessKeyId:"LTAI4GGTwB9nFWsyQMer1vYb",
+                accessKeySecret:"TNA7rUOUmhzE0HNLGcU9fgrkh0tiL0",
                 bucket:"wangzhe-ly"
             }
         })

@@ -43,7 +43,9 @@ p{
         text-align: $var !important;
     }
 }
-
+.text-weight{
+    font-weight:bold;
+}
 
 @each $sizeKey,$size in $font-size{
     .fs-#{$sizeKey}{
@@ -182,6 +184,10 @@ p{
       border-#{$dir}: 1px solid $border-color;
     }
   };
+  .border-btn{
+      border:1px solid $border-color;
+      border-radius: 0.3rem;
+  }
   .border{
       border: 1px solid map-get($map: $colors, $key:blue );
   }

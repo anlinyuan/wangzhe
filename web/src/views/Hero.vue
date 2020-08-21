@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="pt-3 pb-2 border-bottom">
+    <div class="pt-3 pb-1 border-bottom">
       <div class="nav pb-1 jc-around">
         <div class="nav-item active">
           <router-link class="nav-link" tag="div" :to="`/heroes/${id}`">英雄初识</router-link>
@@ -42,7 +42,35 @@
       </div>
     </div>
 
-    <div>{{this.model.skills}}</div>
+    <div class="d-flex mx-2 my-3">
+      <div class="border-btn flex-1 px-4 py-3 d-flex jc-center mr-1">
+          <i class="iconfont icon-cc-menu-circle text-primary fs-xxl text-weight"></i>
+          <span class="pl-2">英雄介绍视频</span>
+      </div>
+      <div class="border-btn flex-1 px-4 py-3 mx-1 fs-md d-flex jc-center">
+        <i class="iconfont icon-cc-menu-circle text-primary fs-xxl text-weight"></i>
+        <span class="pl-2">一图识英雄</span>       
+      </div>
+    </div>
+    
+    <div class="nav-photo">
+      <ul style="display:flex">
+        <li v-for="(skillPhoto,index) in model.skills" :key="index" 
+        @click="flag=index" class="flex-1 mx-3" >
+          <img :src="skillPhoto.icon" alt="" class="w-100 nav-photo-item" :class="{active:flag===index}">
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <div>
+            <span>{{model.skills[flag].name}}</span>
+            <span>{{model.skills[flag].delay}},{{model.skills[flag].cost}}</span>
+          </div>
+          <p>{{model.skills[flag].description}}</p>
+          <p></p>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
@@ -53,6 +81,7 @@ export default {
   data(){
     return {
       model:null,
+      flag:0,
     }
   },
   methods:{
@@ -88,6 +117,20 @@ export default {
         font-size:0.7rem;
         border:1px solid rgba(255,255,255,0.2)
       }
+    }
+  }
+  .nav-photo{
+    .nav-photo-item{
+      border:2px solid rgba(255,255,255,0);
+      border-radius:50%
+    }
+    .active{
+      border:2px solid #db9e3f;
+      border-radius:50%
+    }
+    ul{
+      padding:0;
+      list-style: none
     }
   }
 }
