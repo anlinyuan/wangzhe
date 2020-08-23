@@ -17,20 +17,20 @@
       <div class="d-flex flex-wrap">
         <!-- css图片精灵优化 -->
         <div class="nav-item mb-3" v-for="(items,index) in navItems" :key="index">
-          <i class="sprite" :class="`${items.icon}`"></i>
+          <i class="sprite sprite-item" :class="`${items.icon}`"></i>
           <div class="py-2">{{items.name}}</div>
         </div>
       </div>
 
       <div class="d-flex flex-wrap" v-if="flag">
         <div class="nav-item mb-3" v-for="(items,index) in MoreNavItems" :key="index">
-          <i class="sprite" :class="`${items.icon}`"></i>
+          <i class="sprite sprite-item" :class="`${items.icon}`"></i>
           <div class="py-2">{{items.name}}</div>
         </div>
       </div>
-      <div class="bg-light py-2 fs-sm" @click="flag = flag?false:true"> 
-        <i class="sprite sprite-arrow mr-1"></i>
-        <span>收起</span>
+      <div class="bg-light py-2 fs-sm" @click="open"> 
+        <i class="sprite sprite-arrow mr-1" :class="objectDown"></i>
+        <span>{{openFlag}}</span>
       </div>
     </div>
   <!-- end of nav icons -->
@@ -65,6 +65,9 @@
         </div> 
       </template>
     </m-list-card>
+
+    <m-card icon="cc-menu-circle" title="精彩视频"></m-card>
+
   <!-- end of m-list-card -->
 
   </div>
@@ -81,52 +84,65 @@ export default {
   },
   data() {
     return{
+      openFlag:"展开",
       flag:false,
-        swiperOption: {
-          pagination: {
-            el:".pagination-home"
-            },
-          observer:true,//修改swiper自己或子元素时，自动初始化swiper 
-          observeParents:true,//修改swiper的父元素时，自动初始化swiper 
-          loop:true,
-          autoplay: {
-            delay: 2000,
-            disableOnInteraction: false
-          }
+      swiperOption: {
+        pagination: {
+          el:".pagination-home"
+          },
+        observer:true,//修改swiper自己或子元素时，自动初始化swiper 
+        observeParents:true,//修改swiper的父元素时，自动初始化swiper 
+        loop:true,
+        autoplay: {
+          delay: 2000,
+          disableOnInteraction: false
+        }
       },
       newsCats:[],
       heroCats:[],
       navItems:[{
-        name:"爆料站",
-        icon:"sprite-news",
-      },{
-        name:"故事站",
-        icon:"sprite-news",
-      },{
-        name:"周边商城",
-        icon:"sprite-news",
-      },
-      {
-        name:"体验服",
-        icon:"sprite-news",
-      }],
+          name:"爆料站",
+          icon:"sprite-news",
+        },{
+          name:"故事站",
+          icon:"sprite-book",
+        },{
+          name:"周边商城",
+          icon:"sprite-store",
+        },
+        {
+          name:"体验服",
+          icon:"sprite-tyf",
+        }],
       MoreNavItems:[{
-        name:"爆料站",
-        icon:"sprite-news",
-      },{
-        name:"故事站",
-        icon:"sprite-news",
-      },{
-        name:"周边商城",
-        icon:"sprite-news",
-      },
-      {
-        name:"体验服",
-        icon:"sprite-news",
-      }],
+          name:"新人专区",
+          icon:"sprite-xrzq",
+        },{
+          name:"荣耀·传承",
+          icon:"sprite-rych",
+        },{
+          name:"王者营地",
+          icon:"sprite-wzyd",
+        },
+        {
+          name:"公众号",
+          icon:"sprite-gzh",
+        }],
+    }
+  },
+  computed:{
+    objectDown:function(){
+      return {
+        down:!this.flag,
+      }
     }
   },
   methods:{
+    open(){
+      this.flag = this.flag?false:true;
+      this.openFlag = this.openFlag=="展开"?"收起":"展开";
+      
+    },
     async fetchNewsCats(){
       const res = await this.$http.get('news/list')
       this.newsCats = res.data
@@ -165,5 +181,29 @@ export default {
       border-right: none;
     }
   }
+}
+.sprite-news {
+  background-position: 63.546% 15.517%;
+}
+.sprite-book{
+  background-position: 90.483% 15.614%;
+}
+.sprite-store{
+  background-position: 36.746% 0.924%;
+}
+.sprite-tyf{
+  background-position: 10.408% 15.517%;
+}
+.sprite-xrzq{
+  background-position: 36.467% 15.287%;
+}
+.sprite-rych{
+  background-position: 10.408% 15.517%;
+}
+.sprite-wzyd{
+  background-position: 63.3% 0.927%;
+}
+.sprite-gzh{
+  background-position: 0 96.207%;
 }
 </style>

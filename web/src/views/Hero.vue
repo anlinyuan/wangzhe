@@ -96,9 +96,21 @@
         </div>
       </div>
     </m-card>
-    <div>
-  
-    </div>
+
+    <m-card icon="cc-menu-circle" title="使用技巧">{{this.model.usageTips}}</m-card>
+    <m-card icon="cc-menu-circle" title="对抗技巧">{{this.model.battleTipes}}</m-card>
+    <m-card icon="cc-menu-circle" title="团战思路">{{this.model.teamTipes}}</m-card>
+    <m-card icon="cc-menu-circle" title="英雄关系" class="partners">
+      <p class="mt-0 mb-2 fs-lg">最佳搭档</p>
+      <div class="border-bottom">
+        <div class="d-flex mb-4" 
+        v-for="(partner,index) in model.partners" :key="index">
+          <img :src="partner.hero.avatar" alt="" class="photo">
+          <p class="m-0 pl-3">{{partner.description}}</p>
+        </div>
+      </div>
+
+    </m-card>
   </div>
 </template>
 <script>
@@ -167,6 +179,12 @@ export default {
     height:3.9rem;
     border: 1px solid rgba(0,0,0,0);
     border-radius:50%
+  }
+  .partners{
+    .photo{
+      width:3.9rem;
+      height: 3.9rem;
+    }
   }
 }
 </style>

@@ -2,7 +2,8 @@
 <!-- v-if 因为model一开始为null，如果没有v-if进入页面就会报错 -->
   <div class="page-article" v-if="model">
     <div class="d-flex py-3 px-2 border-bottom">
-      <div class="iconfont icon-Active text-blue "></div>
+      <router-link tag="div" :to="`/`"
+      class="iconfont icon-Active text-blue "></router-link>
       <strong class="flex-1 text-blue pl-2 text-ellipsis">
         {{model.title}}
       </strong>
