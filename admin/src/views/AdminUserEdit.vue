@@ -8,6 +8,12 @@
         <el-form-item label="密码" >
             <el-input type="text" v-model="model.password"></el-input>
         </el-form-item>
+        <el-form-item label="身份">
+            <el-radio-group v-model="model.admin">
+            <el-radio label="管理员" value="1"></el-radio>
+            <el-radio label="普通用户" value="0"></el-radio>
+            </el-radio-group>
+        </el-form-item>
         <el-form-item>
             <el-button type="primary" native-type="submit">保存</el-button>
         </el-form-item>

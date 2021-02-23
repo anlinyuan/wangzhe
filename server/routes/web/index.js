@@ -4,6 +4,7 @@ module.exports=app=>{
     const Category = mongoose.model('Category')
     const Article = mongoose.model('Article')
     const Hero = mongoose.model('Hero')
+    const Department = mongoose.model('Department')
 
 
    // 导入新闻数据接口
@@ -159,6 +160,11 @@ router.get('/heroes/:id',async (req,res)=>{
     .populate('categories items1 items2 ')//关联取出分类
     .populate('partners.hero',{avatar:1})
     .lean()
+  res.send(data)
+})
+
+router.get('/departments',async (req,res)=>{
+  const data = await Department.find().limit(100)
   res.send(data)
 })
 

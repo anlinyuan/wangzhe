@@ -21,6 +21,20 @@ import AdList from '../views/AdList.vue'
 import AdminUserEdit from '../views/AdminUserEdit.vue'
 import AdminUserList from '../views/AdminUserList.vue' 
 
+import QuestionEdit from '../views/QuestionEdit.vue'
+import QuestionList from '../views/QuestionList.vue' 
+
+import TestEdit from '../views/TestEdit.vue'
+import TestList from '../views/TestList.vue' 
+
+import TestItemEdit from '../views/TestItemEdit.vue'
+import TestItemList from '../views/TestItemList.vue' 
+
+import DepartmentEdit from '../views/DepartmentEdit.vue'
+import DepartmentList from '../views/DepartmentList.vue' 
+
+import RecruitEdit from '../views/RecruitEdit.vue'
+import RecruitList from '../views/RecruitList.vue' 
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -56,6 +70,26 @@ const router = new Router({
         { path: '/admin_users/create', component: AdminUserEdit },
         { path: '/admin_users/edit/:id', component: AdminUserEdit, props: true },
         { path: '/admin_users/list', component: AdminUserList },
+
+        {path:'/questions/create',component:QuestionEdit,},
+        {path:'/questions/list',component:QuestionList},
+        {path:'/questions/edit/:id',component:QuestionEdit,props:true},
+
+        {path:'/tests/create',component:TestEdit,},
+        {path:'/tests/list',component:TestList},
+        {path:'/tests/edit/:id',component:TestEdit,props:true},
+
+        {path:'/test_items/create',component:TestItemEdit,},
+        {path:'/test_items/list',component:TestItemList},
+        {path:'/test_items/edit/:id',component:TestItemEdit,props:true},
+
+        {path:'/departments/create',component:DepartmentEdit,},
+        {path:'/departments/list',component:DepartmentList},
+        {path:'/departments/edit/:id',component:DepartmentEdit,props:true},
+
+        {path:'/recruits/create',component:RecruitEdit,},
+        {path:'/recruits/list',component:RecruitList},
+        {path:'/recruits/edit/:id',component:RecruitEdit,props:true},
       ]
     },
   ]

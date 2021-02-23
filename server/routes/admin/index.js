@@ -5,6 +5,9 @@ module.exports = app =>{
     //npm i http-assert 错误处理
     const assert = require('http-assert')
 
+    const mongoose = require('mongoose')
+    const Category = mongoose.model('Category')
+
     const AdminUser = require('../../models/AdminUser')
 
     const router = express.Router({
@@ -57,7 +60,16 @@ module.exports = app =>{
 
     //获取特定资源
     router.get('/:id',async(req,res)=>{
-        const model = await req.Model.findById(req.params.id)
+        let model = await req.Model.findById(req.params.id)
+        if(req.Model.modelName==="Test"){
+            // model.questions[0]=1
+            let questionList = model.questions;
+            for(let i=0;i<questionList.length;i++){
+                model.questions[i] = await mongoose.model('Question').findById(questionList[i]);
+                // model.data.questions[i] = 1;
+            }
+        }
+        
         res.send(model)
     })
    
@@ -113,7 +125,7 @@ module.exports = app =>{
         
         //app.get()一个变量获取参数，多个发起请求
         const token = jwt.sign({id:user._id},app.get('secret'))
-        return res.send({token})
+        return res.send({token,username})
     })
 
     app.use(async (err, req, res, next) => {

@@ -11,6 +11,7 @@ const schema = new mongoose.Schema({
         set(val){
             return require('bcrypt').hashSync(val,10);
         }
-    }
+    },
+    admin:{type:String}
 })
 module.exports = mongoose.model('AdminUser',schema)

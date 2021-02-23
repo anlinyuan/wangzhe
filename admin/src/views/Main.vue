@@ -51,6 +51,54 @@
           <el-menu-item index="/admin_users/list">管理员列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+
+      <el-submenu index="4">
+        <template slot="title"><i class="el-icon-message"></i>题目设置</template>
+        <el-menu-item-group>
+          <template slot="title">试题</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/questions/create">新增题目</el-menu-item>
+          <el-menu-item index="/questions/list">题目列表</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
+          <template slot="title">试卷</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/tests/create">新增试卷</el-menu-item>
+          <el-menu-item index="/tests/list">试卷列表</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+
+      <el-submenu index="5">
+        <template slot="title"><i class="el-icon-message"></i>考试设置</template>
+        <el-menu-item-group>
+          <template slot="title">考试场次</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/test_items/create">新增考试</el-menu-item>
+          <el-menu-item index="/test_items/list">考试列表</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
+          <template slot="title">学生答卷</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/tests/create">新增答卷</el-menu-item>
+          <el-menu-item index="/tests/list">答卷列表</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+
+      <el-submenu index="6">
+        <template slot="title"><i class="el-icon-message"></i>招聘设置</template>
+        <el-menu-item-group>
+          <template slot="title">部门</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/departments/create">新增部门</el-menu-item>
+          <el-menu-item index="/departments/list">部门列表</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
+          <template slot="title">岗位</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/recruits/create">新增岗位</el-menu-item>
+          <el-menu-item index="/recruits/list">岗位列表</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
     </el-menu>
   </el-aside>
   
