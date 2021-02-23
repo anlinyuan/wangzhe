@@ -113,7 +113,7 @@ module.exports = app =>{
         //http-assert
         assert(user,422,"用户不存在")
         //校验密码，比较明文与密文是否匹配,返回布尔
-        const isValid = require('bcrypt').compareSync(password,user.password)
+        const isValid = require('bcryptjs').compareSync(password,user.password)
         // if(!isValid){
         //     return res.status(422).send({
         //         message:'密码错误'
