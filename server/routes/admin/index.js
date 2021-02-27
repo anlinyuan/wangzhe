@@ -7,6 +7,10 @@ module.exports = app =>{
 
     const mongoose = require('mongoose')
     const Category = mongoose.model('Category')
+    const Vitae = mongoose.model('Vitae')
+    const Recruit = mongoose.model('Recruit')
+    const TestAnswer = mongoose.model('TestAnswer')
+    const TestItem = mongoose.model('TestItem')
 
     const AdminUser = require('../../models/AdminUser')
 
@@ -72,7 +76,59 @@ module.exports = app =>{
         
         res.send(model)
     })
-   
+    //岗位id获取人
+    app.get('/admin/api/recruit_item/:id',authMiddleware(), async(req,res)=>{
+        let model = await Vitae.find({"recruits":req.params.id})
+        let a = await TestItem.find({recruit:req.params.id})
+        let b=[]
+        for(let i=0;i<model.length;i++){
+            b.push({})
+            b[i].name = model[i].name;
+            b[i].vitae = model[i]._id;
+            b[i].user_id = model[i].user;
+            b[i].tset_answer = await TestAnswer.find({"user":model[i].user,"test_item":a._id},{_id:1,pass:1,score:1})
+            b[i].test_item = a
+        }
+       
+        res.send(b)
+    })
+    //通过用户id获取简历
+    app.get('/admin/api/vitae/:id',authMiddleware(), async(req,res)=>{
+        let model = await Vitae.findOne({"user":req.params.id})
+        res.send(model)
+    })
+    //通过用户id获取进度
+    app.get('/admin/api/schedule/:id',authMiddleware(), async(req,res)=>{
+        let model = await Vitae.findOne({"user":req.params.id})
+        if(model){
+            let recruitsList = model.recruits;
+            for(let i=0;i<recruitsList.length;i++){
+                let list = await Recruit.aggregate([
+                    //match条件（while）
+                    {$match:{_id:recruitsList[i]}},
+                    {
+                        //左外链接
+                        $lookup:{
+                            //名字默认是模型名字的小写加复数，（模型第三个参数可以设定）
+                            from:'testitems',
+                            //本地键
+                            localField:'test',
+                            //外键
+                            foreignField:'_id',
+                            as:'test_item'
+                        }
+                    },
+                  ])
+                // await Recruit.findById(recruitsList[i])
+                list[0].answer = await TestAnswer.find({"user":req.params.id,"test_item":list.test},{_id:1,pass:1,score:1})
+                model.recruits[i] = list
+                // model.recruits[i] = await Recruit.findById(recruitsList[i])
+            }
+        }
+        res.send(model)
+    })
+
+
     //上传数据
     const multer = require('multer')
     const MAO = require('multer-aliyun-oss');
@@ -125,7 +181,12 @@ module.exports = app =>{
         
         //app.get()一个变量获取参数，多个发起请求
         const token = jwt.sign({id:user._id},app.get('secret'))
-        return res.send({token,username})
+        return res.send({
+            "token":token,
+            "username":user.username,
+            "user_id":user._id,
+            "admin":user.admin
+        })
     })
 
     app.use(async (err, req, res, next) => {

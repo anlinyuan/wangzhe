@@ -10,8 +10,8 @@
         </el-form-item>
         <el-form-item label="身份">
             <el-radio-group v-model="model.admin">
-            <el-radio label="管理员" value="1"></el-radio>
-            <el-radio label="普通用户" value="0"></el-radio>
+            <el-radio label="1">管理员</el-radio>
+            <el-radio label="0">普通用户</el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item>

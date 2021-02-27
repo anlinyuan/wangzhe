@@ -164,7 +164,20 @@ router.get('/heroes/:id',async (req,res)=>{
 })
 
 router.get('/departments',async (req,res)=>{
-  const data = await Department.find().limit(100)
+  const data = await Department.aggregate([
+    {
+        //左外链接
+        $lookup:{
+            //名字默认是模型名字的小写加复数，（模型第三个参数可以设定）
+            from:'recruits',
+            //本地键
+            localField:'_id',
+            //外键
+            foreignField:'department',
+            as:'recruitList'
+        }
+    },
+  ])
   res.send(data)
 })
 

@@ -18,6 +18,9 @@
             </el-select>
         </el-form-item>
 
+        <el-form-item label="考试" >
+            <el-input v-model="model.test"></el-input>
+        </el-form-item>
 
         <el-date-picker
         v-model="model.start"
@@ -79,6 +82,8 @@ export default {
         async fetch(){
             const res = await this.$http.get(`/rest/recruits/${this.id}`)
             this.model = res.data
+            const r = await this.$http.get(`/recruit_item/${this.id}`)
+            console.log(r)
         },
         async fetchCategories(){
             const res = await this.$http.get(`/rest/departments`)

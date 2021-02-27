@@ -22,8 +22,12 @@
         placeholder="选择日期时间">
         </el-date-picker>
 
-        <el-form-item label="参与人员" >
-            <el-input v-model="model.examinee"></el-input>
+        <el-form-item label="所属岗位" >
+            <el-select v-model="model.recruit" placeholder="请选择">
+                <el-option v-for="item in recruit" :key="item._id"
+                :label="item.name" :value="item._id">
+                </el-option>
+            </el-select>
         </el-form-item>
         <!-- <el-form-item label="参与人员" >
             <el-select v-model="model.examinee" multiple>
@@ -62,7 +66,7 @@ export default {
         return {
             model:{
             },
-            categories:[]
+            recruit:[]
         }
     },
     methods: {
@@ -88,8 +92,8 @@ export default {
             this.model = res.data
         },
         async fetchCategories(){
-            const res = await this.$http.get(`/rest/categories`)
-            this.categories = res.data
+            const res = await this.$http.get(`/rest/recruits`)
+            this.recruit = res.data
         }
     },
     created(){

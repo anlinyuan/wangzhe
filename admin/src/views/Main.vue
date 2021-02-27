@@ -98,6 +98,13 @@
           <el-menu-item index="/recruits/create">新增岗位</el-menu-item>
           <el-menu-item index="/recruits/list">岗位列表</el-menu-item>
         </el-menu-item-group>
+
+        <el-menu-item-group>
+          <template slot="title">简历</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/vitaes/create">新增简历</el-menu-item>
+          <el-menu-item index="/vitaes/list">简历列表</el-menu-item>
+        </el-menu-item-group>        
       </el-submenu>
     </el-menu>
   </el-aside>

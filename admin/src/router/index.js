@@ -35,6 +35,9 @@ import DepartmentList from '../views/DepartmentList.vue'
 
 import RecruitEdit from '../views/RecruitEdit.vue'
 import RecruitList from '../views/RecruitList.vue' 
+
+import VitaeEdit from '../views/VitaeEdit.vue'
+import VitaeList from '../views/VitaeList.vue' 
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -90,6 +93,10 @@ const router = new Router({
         {path:'/recruits/create',component:RecruitEdit,},
         {path:'/recruits/list',component:RecruitList},
         {path:'/recruits/edit/:id',component:RecruitEdit,props:true},
+
+        {path:'/vitaes/create',component:VitaeEdit,},
+        {path:'/vitaes/list',component:VitaeList},
+        {path:'/vitaes/edit/:id',component:VitaeEdit,props:true},
       ]
     },
   ]
