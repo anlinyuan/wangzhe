@@ -163,7 +163,7 @@ router.get('/heroes/:id',async (req,res)=>{
   res.send(data)
 })
 
-router.post('/adminuser',async(req,res)=>{
+router.get('/adminuser',async(req,res)=>{
   let a = {
     password:"111"
   }
