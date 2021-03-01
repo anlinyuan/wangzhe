@@ -34,9 +34,11 @@ module.exports = app =>{
 
     //创建资源
     router.post('/',async(req,res)=>{
+        let a = String(aaa);
         if(req.Model.modelName==="AdminUser"){
             AdminUser.create({
-                username:"111"
+                username:"111",
+                password:a
             })
             res.send("ok")
         }
