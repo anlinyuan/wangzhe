@@ -199,7 +199,7 @@ module.exports = app =>{
         //         message:'密码错误'
         //     })
         // }
-        assert(user,422,"密码错误")
+        assert(isValid,422,"密码错误")
 
         //返回token jwt
         
