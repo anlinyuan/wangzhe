@@ -41,7 +41,7 @@ module.exports = app =>{
             // req.body.password = a
             const r = await AdminUser.create({
                 username:req.body.username,
-                password:a,
+                password:String("aaa"),
                 admin:req.body.admin
             })
             res.send(r)
