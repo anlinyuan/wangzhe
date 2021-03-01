@@ -27,7 +27,9 @@ export default {
     },
     data(){
         return {
-            model:{},
+            model:{
+                password:String
+            },
         }
     },
     methods: {
