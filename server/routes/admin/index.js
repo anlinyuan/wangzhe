@@ -175,15 +175,16 @@ module.exports = app =>{
 
     //登陆接口
     app.post('/admin/api/login',async(req,res)=>{
-        res.send(req.body);
-        res.send('ok');
-        // const {username,password}=req.body;
-        // //找用户，校验密码，返回token
-        // //之前设定密码取不到，加select取密码
         
-        // const user = await AdminUser.findOne({
-        //     username : username
-        // }).select('+password')
+        // res.send('ok');
+        const {username,password}=req.body;
+        //找用户，校验密码，返回token
+        //之前设定密码取不到，加select取密码
+        
+        const user = await AdminUser.findOne({
+            username : username
+        }).select('+password')
+        res.send(user);
         // //普通写法
         // // if(!user){
         // //     return res.status(422).send({
