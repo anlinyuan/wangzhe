@@ -172,6 +172,10 @@ module.exports = app =>{
         // file.url = `http://test.alinyuan.com/uploads/${file.filename}`
         res.send(file)
     })
+    app.post('/admin/api/register',async(req,res)=>{
+        const model = await AdminUser.create(req.body)
+        res.send(model)
+    })
 
     //登陆接口
     app.post('/admin/api/login',async(req,res)=>{

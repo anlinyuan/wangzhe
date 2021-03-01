@@ -39,11 +39,6 @@ export default {
                 await this.$http.put(`/rest/admin_users/${this.id}`,this.model)
             }else{
                 await this.$http.post('/rest/admin_users',this.model);
-                // await this.$http.post('/rest/admin_users',{
-                //     username:"1234",
-                //     password:"1234",
-                //     admin:"0"
-                // });
             }
             this.$router.push('/admin_users/list')
             this.$message({
