@@ -34,16 +34,19 @@ module.exports = app =>{
 
     //创建资源
     router.post('/',async(req,res)=>{
-        let a = String("aaa");
+
+        // let a = String("aaa");
         if(req.Model.modelName==="AdminUser"){
-            AdminUser.create({
-                username:"111",
-                password:a
-            })
-            res.send("ok")
+            let a = String(req.body.password);
+            req.body.password = a
+            // AdminUser.create({
+            //     username:"111",
+            //     password:a
+            // })
+            // res.send("ok")
         }
-        // const model = await req.Model.create(req.body)
-        // res.send(model)
+        const model = await req.Model.create(req.body)
+        res.send(model)
     })
 
     //删除资源
