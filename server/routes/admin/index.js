@@ -175,6 +175,7 @@ module.exports = app =>{
 
     //登陆接口
     app.post('/admin/api/login',async(req,res)=>{
+        res.send(req.body);
         res.send('ok');
         // const {username,password}=req.body;
         // //找用户，校验密码，返回token
