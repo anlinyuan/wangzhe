@@ -39,7 +39,7 @@ module.exports = app =>{
         if(req.Model.modelName==="AdminUser"){
             // let a = String(req.body.password);
             // req.body.password = a
-            const r = await AdminUser.create({
+            const r = AdminUser.create({
                 username:req.body.username,
                 password:String("aaa"),
                 admin:req.body.admin
