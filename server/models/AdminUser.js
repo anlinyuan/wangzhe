@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
         //set 自定义保存方法
         //npm i bcrypt 密码散列
         set(val){
-            return require('bcrypt').hashSync(val,10);
+            return require('bcryptjs').hashSync(val,10);
         }
     },
     admin:{type:String}
