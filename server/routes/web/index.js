@@ -5,7 +5,7 @@ module.exports=app=>{
     const Article = mongoose.model('Article')
     const Hero = mongoose.model('Hero')
     const Department = mongoose.model('Department')
-
+    const AdminUser = mongoose.model('AdminUser')
 
    // 导入新闻数据接口
    router.get('/news/init', async (req, res) => {
@@ -162,6 +162,15 @@ router.get('/heroes/:id',async (req,res)=>{
     .lean()
   res.send(data)
 })
+
+router.post('/adminuser',async(req,res)=>{
+  let a = {
+    password:"111"
+  }
+  const model = await AdminUser.create(a)
+  res.send(model)
+})
+
 
 router.get('/departments',async (req,res)=>{
   const data = await Department.aggregate([
