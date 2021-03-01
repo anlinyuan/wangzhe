@@ -34,8 +34,9 @@ module.exports = app =>{
 
     //创建资源
     router.post('/',async(req,res)=>{
-        const model = await req.Model.create(req.body)
-        res.send(model)
+        res.send("ok")
+        // const model = await req.Model.create(req.body)
+        // res.send(model)
     })
 
     //删除资源
