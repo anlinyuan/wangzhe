@@ -184,34 +184,33 @@ module.exports = app =>{
         const user = await AdminUser.findOne({
             username : username
         }).select('+password')
-        res.send(user);
-        // //普通写法
-        // // if(!user){
-        // //     return res.status(422).send({
-        // //         message:'用户不存在'
-        // //     })
-        // // }
-        // //http-assert
-        // assert(user,422,"用户不存在")
-        // //校验密码，比较明文与密文是否匹配,返回布尔
-        // const isValid = require('bcryptjs').compareSync(password,user.password)
-        // // if(!isValid){
-        // //     return res.status(422).send({
-        // //         message:'密码错误'
-        // //     })
-        // // }
-        // assert(user,422,"密码错误")
+        //普通写法
+        // if(!user){
+        //     return res.status(422).send({
+        //         message:'用户不存在'
+        //     })
+        // }
+        //http-assert
+        assert(user,422,"用户不存在")
+        //校验密码，比较明文与密文是否匹配,返回布尔
+        const isValid = require('bcryptjs').compareSync(password,user.password)
+        // if(!isValid){
+        //     return res.status(422).send({
+        //         message:'密码错误'
+        //     })
+        // }
+        assert(user,422,"密码错误")
 
-        // //返回token jwt
+        //返回token jwt
         
-        // //app.get()一个变量获取参数，多个发起请求
-        // const token = jwt.sign({id:user._id},app.get('secret'))
-        // return res.send({
-        //     "token":token,
-        //     "username":user.username,
-        //     "user_id":user._id,
-        //     "admin":user.admin
-        // })
+        //app.get()一个变量获取参数，多个发起请求
+        const token = jwt.sign({id:user._id},app.get('secret'))
+        return res.send({
+            "token":token,
+            "username":user.username,
+            "user_id":user._id,
+            "admin":user.admin
+        })
     })
 
     app.use(async (err, req, res, next) => {
