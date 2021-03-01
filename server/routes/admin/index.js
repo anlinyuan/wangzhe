@@ -39,11 +39,12 @@ module.exports = app =>{
         if(req.Model.modelName==="AdminUser"){
             let a = String(req.body.password);
             // req.body.password = a
-            AdminUser.create({
-                username:"111",
-                password:a
+            const r = AdminUser.create({
+                username:req.body.username,
+                password:a,
+                admin:req.body.admin
             })
-            res.send("ok")
+            res.send(r)
         }
         // const model = await req.Model.create(req.body)
         // res.send(model)
