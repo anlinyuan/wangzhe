@@ -35,6 +35,7 @@
     },
     methods:{
       async login(){
+        console.log(this.model)
         const res = await this.$http.post('/login',this.model);
         console.log(res)
         localStorage.token = res.data.token

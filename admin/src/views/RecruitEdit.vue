@@ -82,7 +82,9 @@ export default {
         async fetch(){
             const res = await this.$http.get(`/rest/recruits/${this.id}`)
             this.model = res.data
-            const r = await this.$http.get(`/recruit_item/${this.id}`)
+            // const r = await this.$http.get(`/recruit_item/${this.id}`)
+            // console.log(r)
+            const r = await this.$http.get(`/departments`)
             console.log(r)
         },
         async fetchCategories(){

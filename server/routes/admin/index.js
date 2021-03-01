@@ -11,6 +11,7 @@ module.exports = app =>{
     const Recruit = mongoose.model('Recruit')
     const TestAnswer = mongoose.model('TestAnswer')
     const TestItem = mongoose.model('TestItem')
+    const Department = mongoose.model('Department')
 
     const AdminUser = require('../../models/AdminUser')
 
@@ -76,6 +77,27 @@ module.exports = app =>{
         
         res.send(model)
     })
+
+    app.get('/admin/api/departments',async (req,res)=>{
+        const data = await Department.aggregate([
+          {
+              //左外链接
+              $lookup:{
+                  //名字默认是模型名字的小写加复数，（模型第三个参数可以设定）
+                  from:'recruits',
+                  //本地键
+                  localField:'_id',
+                  //外键
+                  foreignField:'department',
+                  as:'recruitList'
+              }
+          },
+        ])
+        res.send(data)
+      })
+
+
+
     //岗位id获取人
     app.get('/admin/api/recruit_item/:id',authMiddleware(), async(req,res)=>{
         let model = await Vitae.find({"recruits":req.params.id})
@@ -103,24 +125,25 @@ module.exports = app =>{
         if(model){
             let recruitsList = model.recruits;
             for(let i=0;i<recruitsList.length;i++){
-                let list = await Recruit.aggregate([
-                    //match条件（while）
-                    {$match:{_id:recruitsList[i]}},
-                    {
-                        //左外链接
-                        $lookup:{
-                            //名字默认是模型名字的小写加复数，（模型第三个参数可以设定）
-                            from:'testitems',
-                            //本地键
-                            localField:'test',
-                            //外键
-                            foreignField:'_id',
-                            as:'test_item'
-                        }
-                    },
-                  ])
+                let list = await Recruit.findOne({_id:recruitsList[i]}).populate("test").lean()
+                // let list = await Recruit.aggregate([
+                //     //match条件（while）
+                //     {$match:{_id:recruitsList[i]}},
+                //     {
+                //         //左外链接
+                //         $lookup:{
+                //             //名字默认是模型名字的小写加复数，（模型第三个参数可以设定）
+                //             from:'testitems',
+                //             //本地键
+                //             localField:'test',
+                //             //外键
+                //             foreignField:'_id',
+                //             as:'test_item'
+                //         }
+                //     },
+                //   ])
                 // await Recruit.findById(recruitsList[i])
-                list[0].answer = await TestAnswer.find({"user":req.params.id,"test_item":list.test},{_id:1,pass:1,score:1})
+                list.answer = await TestAnswer.findOne({"user":req.params.id,"test_item":list.test},{_id:1,pass:1,score:1})
                 model.recruits[i] = list
                 // model.recruits[i] = await Recruit.findById(recruitsList[i])
             }
@@ -152,41 +175,41 @@ module.exports = app =>{
 
     //登陆接口
     app.post('/admin/api/login',async(req,res)=>{
-        // res.send('ok');
-        const {username,password}=req.body;
-        //找用户，校验密码，返回token
-        //之前设定密码取不到，加select取密码
+        res.send('ok');
+        // const {username,password}=req.body;
+        // //找用户，校验密码，返回token
+        // //之前设定密码取不到，加select取密码
         
-        const user = await AdminUser.findOne({
-            username : username
-        }).select('+password')
-        //普通写法
-        // if(!user){
-        //     return res.status(422).send({
-        //         message:'用户不存在'
-        //     })
-        // }
-        //http-assert
-        assert(user,422,"用户不存在")
-        //校验密码，比较明文与密文是否匹配,返回布尔
-        const isValid = require('bcryptjs').compareSync(password,user.password)
-        // if(!isValid){
-        //     return res.status(422).send({
-        //         message:'密码错误'
-        //     })
-        // }
-        assert(user,422,"密码错误")
+        // const user = await AdminUser.findOne({
+        //     username : username
+        // }).select('+password')
+        // //普通写法
+        // // if(!user){
+        // //     return res.status(422).send({
+        // //         message:'用户不存在'
+        // //     })
+        // // }
+        // //http-assert
+        // assert(user,422,"用户不存在")
+        // //校验密码，比较明文与密文是否匹配,返回布尔
+        // const isValid = require('bcryptjs').compareSync(password,user.password)
+        // // if(!isValid){
+        // //     return res.status(422).send({
+        // //         message:'密码错误'
+        // //     })
+        // // }
+        // assert(user,422,"密码错误")
 
-        //返回token jwt
+        // //返回token jwt
         
-        //app.get()一个变量获取参数，多个发起请求
-        const token = jwt.sign({id:user._id},app.get('secret'))
-        return res.send({
-            "token":token,
-            "username":user.username,
-            "user_id":user._id,
-            "admin":user.admin
-        })
+        // //app.get()一个变量获取参数，多个发起请求
+        // const token = jwt.sign({id:user._id},app.get('secret'))
+        // return res.send({
+        //     "token":token,
+        //     "username":user.username,
+        //     "user_id":user._id,
+        //     "admin":user.admin
+        // })
     })
 
     app.use(async (err, req, res, next) => {
