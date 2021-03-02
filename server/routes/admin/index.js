@@ -12,6 +12,7 @@ module.exports = app =>{
     const TestAnswer = mongoose.model('TestAnswer')
     const TestItem = mongoose.model('TestItem')
     const Department = mongoose.model('Department')
+    // const Department = mongoose.model('Department')
 
     const AdminUser = require('../../models/AdminUser')
 
@@ -58,6 +59,8 @@ module.exports = app =>{
         //modelName N大写
         if(req.Model.modelName==="Category"){
             queryOptions.populate = "parent"
+        }else if(req.Model.modelName==="Test"){
+            queryOptions.populate = "categories"
         }
         const items = await req.Model.find().setOptions(queryOptions).limit(100)
         res.send(items)
@@ -65,19 +68,18 @@ module.exports = app =>{
 
     //获取特定资源
     router.get('/:id',async(req,res)=>{
-        let model = await req.Model.findById(req.params.id)
+        let queryOptions={}
         if(req.Model.modelName==="Test"){
-            // model.questions[0]=1
-            let questionList = model.questions;
-            for(let i=0;i<questionList.length;i++){
-                model.questions[i] = await mongoose.model('Question').findById(questionList[i]);
-                // model.data.questions[i] = 1;
-            }
+            queryOptions.populate = "questions"
+        }else if(req.Model.modelName==="TestItem"){
+            queryOptions.populate = "test recruit"
         }
-        
+        const model = await req.Model.findById(req.params.id).setOptions(queryOptions)
         res.send(model)
     })
 
+
+    //首页获取部门以及岗位
     app.get('/admin/api/departments',async (req,res)=>{
         const data = await Department.aggregate([
           {
@@ -95,9 +97,6 @@ module.exports = app =>{
         ])
         res.send(data)
       })
-
-
-
     //岗位id获取人
     app.get('/admin/api/recruit_item/:id',authMiddleware(), async(req,res)=>{
         let model = await Vitae.find({"recruits":req.params.id})
@@ -121,36 +120,35 @@ module.exports = app =>{
     })
     //通过用户id获取进度
     app.get('/admin/api/schedule/:id',authMiddleware(), async(req,res)=>{
-        let model = await Vitae.findOne({"user":req.params.id})
+        let model = await Vitae.findOne(
+            {"user":req.params.id},
+            {"_id":1}
+            ).populate({
+            path: 'recruits',
+            select:"name",
+            populate: { path: 'test', select:["name","start","end"],}
+          }).lean()
         if(model){
-            let recruitsList = model.recruits;
-            for(let i=0;i<recruitsList.length;i++){
-                let list = await Recruit.findOne({_id:recruitsList[i]}).populate("test").lean()
-                // let list = await Recruit.aggregate([
-                //     //match条件（while）
-                //     {$match:{_id:recruitsList[i]}},
-                //     {
-                //         //左外链接
-                //         $lookup:{
-                //             //名字默认是模型名字的小写加复数，（模型第三个参数可以设定）
-                //             from:'testitems',
-                //             //本地键
-                //             localField:'test',
-                //             //外键
-                //             foreignField:'_id',
-                //             as:'test_item'
-                //         }
-                //     },
-                //   ])
-                // await Recruit.findById(recruitsList[i])
-                list.answer = await TestAnswer.findOne({"user":req.params.id,"test_item":list.test},{_id:1,pass:1,score:1})
-                model.recruits[i] = list
+            for(let i=0;i<model.recruits.length;i++){
+                // let list = await Recruit.findOne({_id:recruitsList[i]}).populate("test").lean()
+                model.recruits[i].answer = await TestAnswer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
+                // model.recruits[i] = list
                 // model.recruits[i] = await Recruit.findById(recruitsList[i])
             }
         }
         res.send(model)
     })
 
+
+    //通过分类id获取题目
+    app.get('/admin/api/:resource/:id',authMiddleware(), resourceMiddleware(),async(req,res)=>{
+        let model = await req.Model.find({"categories":req.params.id}).populate({
+            path: 'categories',
+            select:"name",
+            populate: { path: 'parent', select:"name"}
+          })
+        res.send(model)
+    })
 
     //上传数据
     const multer = require('multer')

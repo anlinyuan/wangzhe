@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>{{id?"编辑":"新建"}}题目 </h1>
+    <h1>{{id?"编辑":"新建"}}考试 </h1>
     <el-form label-width="120px" @submit.native.prevent="save">
         <el-form-item label="考试名称" >
             <el-input v-model="model.name"></el-input>
@@ -65,8 +65,15 @@ export default {
     data(){
         return {
             model:{
+                name:"",
+                end:"",
+                recruit:"",
+                start:"",
+                test:"",
+                _id:"",
             },
-            recruit:[]
+            recruit:[],
+            testList:[]
         }
     },
     methods: {
@@ -90,10 +97,16 @@ export default {
         async fetch(){
             const res = await this.$http.get(`/rest/test_items/${this.id}`)
             this.model = res.data
+            this.model.recruit = res.data.recruit._id
+            this.model.test = res.data.test._id
+            console.log(this.model)
         },
         async fetchCategories(){
             const res = await this.$http.get(`/rest/recruits`)
             this.recruit = res.data
+            const test = await this.$http.get(`/rest/tests`)
+            this.testList = test.data
+            console.log(this.testList)
         }
     },
     created(){

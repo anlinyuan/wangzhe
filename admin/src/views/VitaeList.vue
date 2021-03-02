@@ -34,7 +34,10 @@ export default {
             const res = await this.$http.get('/rest/vitaes')
             const r = await this.$http.get(`/schedule/${res.data[1].user}`)
             console.log(r)
+            // const r = await this.$http.get(`questions/603101a15366ebf854108253`)
+            // console.log(r)
             this.items = res.data
+            
         },
         async remove(row){
             this.$confirm(`是否删除简历${row.title}？`, '提示', {

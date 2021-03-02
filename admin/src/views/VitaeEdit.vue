@@ -49,12 +49,60 @@
         <el-form-item label="专业" >
             <el-input v-model="model.major"></el-input>
         </el-form-item>
-        <el-form-item label="项目经历" >
-            <el-input v-model="model.projects"></el-input>
-        </el-form-item>
-        <el-form-item label="获奖情况" >
-            <el-input v-model="model.awards"></el-input>
-        </el-form-item>
+
+        <el-button type="text" @click="model.projects.push({})"><i class="el-icon-plus"></i>添加项目经历</el-button>
+        <el-row type="flex" style="flex-wrap:wrap;">
+            <el-col :md="12" v-for="(item,i) in model.projects" :key="i">
+                
+                <el-form-item label="项目名称">
+                    <el-input v-model="item.project_name"></el-input>
+                </el-form-item>
+
+                <el-form-item label="项目时间">
+                    <el-date-picker
+                    v-model="item.project_time"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+
+                <el-form-item label="项目详情">
+                    <el-input v-model="item.project_detail"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button size="small" type="danger" 
+                    @click="model.projects.splice(i,1)">删除</el-button>
+                </el-form-item>
+            </el-col>
+        </el-row>
+
+        <!-- 获奖情况 -->
+        <el-button type="text" @click="model.awards.push({})"><i class="el-icon-plus"></i>添加获奖情况</el-button>
+        <el-row type="flex" style="flex-wrap:wrap;">
+            <el-col :md="12" v-for="(item,i) in model.awards" :key="i">
+                
+                <el-form-item label="获奖名称">
+                    <el-input v-model="item.awards_name"></el-input>
+                </el-form-item>
+
+                <el-form-item label="获奖时间">
+                    <el-input v-model="item.awards_time"></el-input>
+                </el-form-item>
+
+                <el-form-item label="获奖详情">
+                    <el-input v-model="item.awards_detail"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button size="small" type="danger" 
+                    @click="model.awards.splice(i,1)">删除</el-button>
+                </el-form-item>
+            </el-col>
+        </el-row>
+
         <el-form-item label="所掌握的编程语言" >
             <el-input v-model="model.programing"></el-input>
         </el-form-item>
@@ -81,7 +129,10 @@ export default {
     },
     data(){
         return {
-            model:{},
+            model:{
+                projects:[],
+                awards:[],
+            },
             parents:[],
             recruits:[],
             choose_recruits:[]

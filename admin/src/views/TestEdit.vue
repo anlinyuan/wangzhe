@@ -1,11 +1,21 @@
 <template>
   <div class="about">
-    <h1>{{id?"编辑":"新建"}}题目 </h1>
+    <h1>{{id?"编辑":"新建"}}试卷 </h1>
     <el-form label-width="120px" @submit.native.prevent="save">
         <el-form-item label="试卷标题" >
             <el-input v-model="model.name"></el-input>
         </el-form-item>
-        
+        <el-form-item label="试卷分类" >
+            <el-select v-model="model.categories" multiple>
+                <el-option v-for="item in categories" :key="item._id"
+                :label="item.name" :value="item._id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="是否公开试卷" >
+            <el-radio v-model="model.public" label="0">公开</el-radio>
+            <el-radio v-model="model.public" label="1">私密</el-radio>
+        </el-form-item>
         <el-form-item>
             <el-button type="primary" native-type="submit">保存</el-button>
         </el-form-item>
@@ -31,13 +41,11 @@
                         <el-form-item label="名称">
                             <el-input v-model="item.name"></el-input>
                         </el-form-item>
-
-                        <el-form-item label="是否为正确选项">
-                            <el-input v-model="item.flag"></el-input>
-                        </el-form-item>
                     </el-col>
                 </el-row>
-                
+                <el-form-item label="正确选项">
+                    <el-input v-model="question.right"></el-input>
+                </el-form-item>
             </el-col>
         </el-row>   
         
@@ -56,12 +64,14 @@ export default {
         return {
             model:{
                 name:"",
-                questions:[]
+                questions:[],
+                categories:[],
             },
             questions:[{
                 name:"",
                 categories:[],
-                answers:[]
+                answers:[],
+                right:""
             }],
             questionChooes:[],
             categories:[]
@@ -72,7 +82,8 @@ export default {
             this.questions.push({
                 name:"",
                 categories:[],
-                answers:[]
+                answers:[],
+                right:""
             })        
         },
         async save(){
@@ -85,34 +96,35 @@ export default {
             this.$router.push('/tests/list')
             this.$message({
                 type:"success",
-                message:"success" 
+                message:"保存试卷成功" 
             })
         },
         async saveQuestion(){
             console.log(this.questions[0])
             // let questionList = []
-            if(!this.questions){
+            if(!this.questions[0]._id){
                 for(let i=0;i<this.questions.length;i++){
                     let a = await this.$http.post('/rest/questions',this.questions[i]);
                     this.model.questions[i]=a.data._id;
                 }
-                this.save()
             }else{
                 for(let i=0;i<this.questions.length;i++){
                     await this.$http.put(`/rest/questions/${this.questions[i]._id}`,this.questions[i])
                 }
             }
-            this.$router.push('/tests/list')
+            // this.$router.push('/tests/list')
             this.$message({
                 type:"success",
-                message:"success" 
+                message:"保存题目成功" 
             })
-            // this.save()
+            this.save()
         },
         async fetch(){
             const res = await this.$http.get(`/rest/tests/${this.id}`)
             this.model = res.data
             this.questions = this.model.questions
+            console.log(this.model)
+            console.log(this.questions)
         },
         async fetchCategories(){
             const res = await this.$http.get(`/rest/categories`)

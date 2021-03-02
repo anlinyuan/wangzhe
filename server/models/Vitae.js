@@ -11,8 +11,16 @@ const schema = new mongoose.Schema({
     grade:{type:String},
     academic:{type:String},
     major:{type:String},
-    projects:{type:String},
-    awards:{type:String},
+    projects:[{
+        project_name:{type:String},
+        project_time:[{type:Date}],
+        project_detail:{type:String}
+    }],
+    awards:[{
+        awards_name:{type:String},
+        awards_time:{type:String},
+        awards_detail:{type:String}
+    }],
     programing:{type:String},
     language_skill:{type:String},
     self_evalute:{type:String},

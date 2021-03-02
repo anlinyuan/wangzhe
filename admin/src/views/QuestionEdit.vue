@@ -16,17 +16,16 @@
         <el-button type="text" @click="model.answers.push({})"><i class="el-icon-plus"></i>添加选项</el-button>
         <el-row type="flex" style="flex-wrap:wrap;">
             <el-col :md="12" v-for="(item,i) in model.answers" :key="i">
-                
                 <el-form-item label="名称">
                     <el-input v-model="item.name"></el-input>
                 </el-form-item>
-
-                <el-form-item label="是否为正确选项">
-                    <el-input v-model="item.flag"></el-input>
-                </el-form-item>
             </el-col>
         </el-row>
-            
+
+        <el-form-item label="正确选项">
+            <el-input v-model="model.right"></el-input>
+        </el-form-item>
+
         <el-form-item>
             <el-button type="primary" native-type="submit">保存</el-button>
         </el-form-item>
