@@ -171,8 +171,9 @@ module.exports = app =>{
         res.send(file)
     })
     app.post('/admin/api/register',async(req,res)=>{
+        // const {username,password}=req.body;
         const user = await AdminUser.findOne({
-            username : username
+            username : req.body.username
         })
         assert(!user,422,"用户名已存在")
         const model = await AdminUser.create(req.body)
