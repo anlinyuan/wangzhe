@@ -109,7 +109,6 @@ module.exports = app =>{
     //首页获取部门以及岗位
     app.get('/admin/api/departments',async (req,res)=>{
         const data = await Department.aggregate([
-           
             {
               //左外链接
               $lookup:{
@@ -125,17 +124,22 @@ module.exports = app =>{
         ])
         res.send(data)
       })
+
+    app.get('/admin/api/:resource/list',resourceMiddleware(),async(req,res)=>{
+        const cats = await req.Model.find()
+        res.send(cats)
+      })
     //岗位id获取人
     app.get('/admin/api/recruit_item/:id',authMiddleware(), async(req,res)=>{
         let model = await Vitae.find({"recruits":req.params.id})
-        let a = await TestItem.find({recruit:req.params.id})
+        let a = await TestItem.find({recruit:req.params.id},{_id:1,name:1,time:1})
         let b=[]
         for(let i=0;i<model.length;i++){
             b.push({})
             b[i].name = model[i].name;
             b[i].vitae = model[i]._id;
             b[i].user_id = model[i].user;
-            b[i].tset_answer = await Answer.find({"user":model[i].user,"test_item":a._id},{_id:1,pass:1,score:1})
+            b[i].test_answer = await Answer.findOne({"user":model[i].user,"test_item":a._id},{pass:1,score:1,_id:1})
             b[i].test_item = a
         }
        
@@ -226,6 +230,7 @@ module.exports = app =>{
         // file.url = `http://test.alinyuan.com/uploads/${file.filename}`
         res.send(file)
     })
+    //注册
     app.post('/admin/api/register',async(req,res)=>{
         // const {username,password}=req.body;
         const user = await AdminUser.findOne({
