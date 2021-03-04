@@ -9,9 +9,10 @@ module.exports = app =>{
     const Category = mongoose.model('Category')
     const Vitae = mongoose.model('Vitae')
     const Recruit = mongoose.model('Recruit')
-    const TestAnswer = mongoose.model('TestAnswer')
+    const Answer = mongoose.model('Answer')
     const TestItem = mongoose.model('TestItem')
     const Department = mongoose.model('Department')
+    const Question = mongoose.model('Question')
     // const Department = mongoose.model('Department')
 
     const AdminUser = require('../../models/AdminUser')
@@ -35,10 +36,20 @@ module.exports = app =>{
 
     //创建资源
     router.post('/',async(req,res)=>{
-        const model = await req.Model.create(req.body)
+        let model={}
+        if(req.Model.modelName==="Question"){
+            req.body.forEach(async (value) => {
+                if(value._id){
+                    await req.Model.findByIdAndUpdate(value._id,value)
+                }else{
+                    model = await req.Model.create(value)
+                }
+            });
+        }else{
+            model = await req.Model.create(req.body)
+        }
         res.send(model)
     })
-
     //删除资源
     router.delete('/:id',async(req,res)=>{
         await req.Model.findByIdAndDelete(req.params.id,req.body)
@@ -61,6 +72,8 @@ module.exports = app =>{
             queryOptions.populate = "parent"
         }else if(req.Model.modelName==="Test"){
             queryOptions.populate = "categories"
+        }else if(req.Model.modelName==="Answer"){
+            queryOptions.populate = "test_item test"
         }
         const items = await req.Model.find().setOptions(queryOptions).limit(100)
         res.send(items)
@@ -70,7 +83,7 @@ module.exports = app =>{
     router.get('/:id',async(req,res)=>{
         let queryOptions={}
         if(req.Model.modelName==="Test"){
-            queryOptions.populate = "questions"
+            queryOptions.populate = "ture_or_false single_choice multiple_choice subjective"
         }else if(req.Model.modelName==="TestItem"){
             queryOptions.populate = "test recruit"
         }
@@ -78,7 +91,21 @@ module.exports = app =>{
         res.send(model)
     })
 
-
+    app.put('/admin/api/questions/test',authMiddleware(),async(req,res)=>{
+        let model = [],a={},b={};
+        for(let i=0;i<req.body.length;i++){
+            if(req.body[i]._id){
+                b=await Question.findByIdAndUpdate(req.body[i]._id,req.body[i])
+                model.push(b)
+            }else{
+                a = await Question.create(req.body[i])
+                model.push(a)
+            }
+        }
+        // const a = await Question.create(req.body[0])
+        // model.push(a)
+        res.send(model)
+    })
     //首页获取部门以及岗位
     app.get('/admin/api/departments',async (req,res)=>{
         const data = await Department.aggregate([
@@ -107,7 +134,7 @@ module.exports = app =>{
             b[i].name = model[i].name;
             b[i].vitae = model[i]._id;
             b[i].user_id = model[i].user;
-            b[i].tset_answer = await TestAnswer.find({"user":model[i].user,"test_item":a._id},{_id:1,pass:1,score:1})
+            b[i].tset_answer = await Answer.find({"user":model[i].user,"test_item":a._id},{_id:1,pass:1,score:1})
             b[i].test_item = a
         }
        
@@ -131,7 +158,7 @@ module.exports = app =>{
         if(model){
             for(let i=0;i<model.recruits.length;i++){
                 // let list = await Recruit.findOne({_id:recruitsList[i]}).populate("test").lean()
-                model.recruits[i].answer = await TestAnswer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
+                model.recruits[i].answer = await Answer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
                 // model.recruits[i] = list
                 // model.recruits[i] = await Recruit.findById(recruitsList[i])
             }
@@ -147,6 +174,16 @@ module.exports = app =>{
             select:"name",
             populate: { path: 'parent', select:"name"}
           })
+        res.send(model)
+    })
+
+
+    //通过关键词搜索题目或试卷
+    app.get('/admin/api/search/:resource/:keyword',authMiddleware(), resourceMiddleware(),async(req,res)=>{
+        const keyword = req.params.keyword
+        const reg = new RegExp(keyword, 'i') //不区分大小写
+        const model = await req.Model.find(
+            {name:{$regex : reg}})
         res.send(model)
     })
 

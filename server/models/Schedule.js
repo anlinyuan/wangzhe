@@ -6,6 +6,7 @@ const schema = new mongoose.Schema({
     //申请的岗位进度,ref关联哪一个模型
     recruit:{type:mongoose.SchemaTypes.ObjectId,ref:'Recruit'},
     test_item:{type:mongoose.SchemaTypes.ObjectId,ref:'TestItem'},
+    test_answer:{type:mongoose.SchemaTypes.ObjectId,ref:'TestAnswer'},
     pass:{type:String}
 })
 module.exports = mongoose.model('Schedule',schema)

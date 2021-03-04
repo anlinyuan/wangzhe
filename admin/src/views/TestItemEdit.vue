@@ -10,7 +10,16 @@
             <el-input v-model="model.test"></el-input>
         </el-form-item>
 
-        <el-date-picker
+                <el-form-item label="考试时间">
+                    <el-date-picker
+                    v-model="model.time"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+        <!-- <el-date-picker
         v-model="model.start"
         type="datetime"
         placeholder="选择日期时间">
@@ -20,7 +29,7 @@
         v-model="model.end"
         type="datetime"
         placeholder="选择日期时间">
-        </el-date-picker>
+        </el-date-picker> -->
 
         <el-form-item label="所属岗位" >
             <el-select v-model="model.recruit" placeholder="请选择">

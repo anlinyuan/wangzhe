@@ -2,9 +2,9 @@
 <template>
 <el-container style="height: 100vh">
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <!-- :default-openeds默认展开第一个，unique-opened只展开一个 :default-active高亮-->
-    <el-menu router :default-openeds="['1']" unique-opened :default-active="$route.path">
-      <el-submenu index="1">
+    <!-- :default-openeds="['1']"默认展开第一个，unique-opened只展开一个 :default-active高亮-->
+    <el-menu router  unique-opened :default-active="$route.path">
+      <!-- <el-submenu index="1">
         <template slot="title"><i class="el-icon-message"></i>内容管理</template>
 
         <el-menu-item-group>
@@ -24,7 +24,7 @@
           <el-menu-item index="/articles/create">新建文章</el-menu-item>
           <el-menu-item index="/articles/list">文章列表</el-menu-item>
         </el-menu-item-group>
-      </el-submenu>
+      </el-submenu> -->
 
       <el-submenu index="2">
         <template slot="title"><i class="el-icon-message"></i>运营管理</template>
@@ -79,8 +79,8 @@
         <el-menu-item-group>
           <template slot="title">学生答卷</template>
           <!-- index路径前面要/ -->
-          <el-menu-item index="/tests/create">新增答卷</el-menu-item>
-          <el-menu-item index="/tests/list">答卷列表</el-menu-item>
+          <el-menu-item index="/answers/create">新增答卷</el-menu-item>
+          <el-menu-item index="/answers/list">答卷列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
 

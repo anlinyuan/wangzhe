@@ -6,14 +6,14 @@ import Main from '../views/Main.vue'
 import CategoryEdit from '../views/CategoryEdit.vue'
 import CategoryList from '../views/CategoryList.vue'
 
-import ItemEdit from '../views/ItemEdit.vue'
-import ItemList from '../views/ItemList.vue'
+// import ItemEdit from '../views/ItemEdit.vue'
+// import ItemList from '../views/ItemList.vue'
 
-import HeroEdit from '../views/HeroEdit.vue'
-import HeroList from '../views/HeroList.vue'
+// import HeroEdit from '../views/HeroEdit.vue'
+// import HeroList from '../views/HeroList.vue'
 
-import ArticleEdit from '../views/ArticleEdit.vue'
-import ArticleList from '../views/ArticleList.vue'
+// import ArticleEdit from '../views/ArticleEdit.vue'
+// import ArticleList from '../views/ArticleList.vue'
 
 import AdEdit from '../views/AdEdit.vue'
 import AdList from '../views/AdList.vue' 
@@ -38,6 +38,9 @@ import RecruitList from '../views/RecruitList.vue'
 
 import VitaeEdit from '../views/VitaeEdit.vue'
 import VitaeList from '../views/VitaeList.vue' 
+
+import AnswerEdit from '../views/AnswerEdit.vue'
+import AnswerList from '../views/AnswerList.vue' 
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -54,17 +57,17 @@ const router = new Router({
         {path:'/categories/list',component:CategoryList},
         {path:'/categories/edit/:id',component:CategoryEdit,props:true},
   
-        {path:'/items/create',component:ItemEdit,},
-        {path:'/items/list',component:ItemList},
-        {path:'/items/edit/:id',component:ItemEdit,props:true},
+        // {path:'/items/create',component:ItemEdit,},
+        // {path:'/items/list',component:ItemList},
+        // {path:'/items/edit/:id',component:ItemEdit,props:true},
   
-        {path:'/heroes/create',component:HeroEdit,},
-        {path:'/heroes/list',component:HeroList},
-        {path:'/heroes/edit/:id',component:HeroEdit,props:true},
+        // {path:'/heroes/create',component:HeroEdit,},
+        // {path:'/heroes/list',component:HeroList},
+        // {path:'/heroes/edit/:id',component:HeroEdit,props:true},
   
-        {path:'/articles/create',component:ArticleEdit,},
-        {path:'/articles/list',component:ArticleList},
-        {path:'/articles/edit/:id',component:ArticleEdit,props:true},
+        // {path:'/articles/create',component:ArticleEdit,},
+        // {path:'/articles/list',component:ArticleList},
+        // {path:'/articles/edit/:id',component:ArticleEdit,props:true},
   
         { path: '/ads/create', component: AdEdit },
         { path: '/ads/edit/:id', component: AdEdit, props: true },
@@ -97,6 +100,10 @@ const router = new Router({
         {path:'/vitaes/create',component:VitaeEdit,},
         {path:'/vitaes/list',component:VitaeList},
         {path:'/vitaes/edit/:id',component:VitaeEdit,props:true},
+
+        {path:'/answers/create',component:AnswerEdit,},
+        {path:'/answers/list',component:AnswerList},
+        {path:'/answers/edit/:id',component:AnswerEdit,props:true},
       ]
     },
   ]

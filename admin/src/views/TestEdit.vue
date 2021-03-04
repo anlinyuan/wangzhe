@@ -1,6 +1,121 @@
 <template>
   <div class="about">
     <h1>{{id?"编辑":"新建"}}试卷 </h1>
+    <!-- 单选 -->
+    <el-form label-width="120px" @submit.native.prevent="saveQuestion(single_choice,0)" v-show="id">
+        <el-button type="text" @click="AddQuestions(0)">
+            <i class="el-icon-plus"></i>添加单选题
+        </el-button>
+        <el-row type="flex" style="flex-wrap:wrap;">
+            <el-col :md="12" v-for="(question,i) in single_choice" :key="i">
+                <el-form-item label="题目内容" >
+                    <el-input v-model="question.name"></el-input>
+                </el-form-item>
+                <el-row type="flex" style="flex-wrap:wrap;">
+                    <el-col :md="12" v-for="(item,i) in question.answers" :key="i">
+                        <el-form-item label="名称">
+                            <el-input v-model="item.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="正确选项">
+                    <el-input v-model="question.right"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button size="small" type="danger" 
+                    @click="single_choice.splice(i,1)">删除</el-button>
+                </el-form-item>   
+            </el-col>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">保存</el-button>
+            </el-form-item>
+        </el-row>   
+    </el-form>
+    <!-- 多选 -->
+    <el-form label-width="120px" @submit.native.prevent="saveQuestion(multiple_choice,1)" v-show="id">
+        <el-button type="text" @click="AddQuestions(1)">
+            <i class="el-icon-plus"></i>添加多选题
+        </el-button>
+        <el-row type="flex" style="flex-wrap:wrap;">
+            <el-col :md="12" v-for="(question,i) in multiple_choice" :key="i">
+                <el-form-item label="题目内容" >
+                    <el-input v-model="question.name"></el-input>
+                </el-form-item>
+                <el-row type="flex" style="flex-wrap:wrap;">
+                    <el-col :md="12" v-for="(item,i) in question.answers" :key="i">
+                        <el-form-item label="名称">
+                            <el-input v-model="item.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="正确选项">
+                    <el-input v-model="question.right"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button size="small" type="danger" 
+                    @click="multiple_choice.splice(i,1)">删除</el-button>
+                </el-form-item>                
+            </el-col>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">保存</el-button>
+            </el-form-item>
+        </el-row>   
+    </el-form>
+    <!-- 判断 -->
+    <el-form label-width="120px" @submit.native.prevent="saveQuestion(ture_or_false,2)" v-show="id">
+        <el-button type="text" @click="AddQuestions(2)">
+            <i class="el-icon-plus"></i>添加判断题
+        </el-button>
+        <el-row type="flex" style="flex-wrap:wrap;">
+            <el-col :md="12" v-for="(question,i) in ture_or_false" :key="i">
+                <el-form-item label="题目内容" >
+                    <el-input v-model="question.name"></el-input>
+                </el-form-item>
+                <el-row type="flex" style="flex-wrap:wrap;">
+                    <el-col :md="12" v-for="(item,i) in question.answers" :key="i">
+                        <el-form-item label="名称">
+                            <el-input v-model="item.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-form-item label="正确选项">
+                    <el-input v-model="question.right"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button size="small" type="danger" 
+                    @click="ture_or_false.splice(i,1)">删除</el-button>
+                </el-form-item>
+            </el-col>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">保存</el-button>
+            </el-form-item>
+        </el-row>   
+    </el-form>
+    <!-- 主观 -->
+    <el-form label-width="120px" @submit.native.prevent="saveQuestion(subjective,3)" v-show="id">
+        <el-button type="text" @click="AddQuestions(3)">
+            <i class="el-icon-plus"></i>添加主观题
+        </el-button>
+        <el-row type="flex" style="flex-wrap:wrap;">
+            <el-col :md="12" v-for="(question,i) in subjective" :key="i">
+                <el-form-item label="题目内容" >
+                    <el-input v-model="question.name"></el-input>
+                </el-form-item>
+                <el-form-item label="正确选项">
+                    <el-input v-model="question.right"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button size="small" type="danger" 
+                    @click="subjective.splice(i,1)">删除</el-button>
+                </el-form-item>
+            </el-col>
+            <el-form-item>
+                <el-button type="primary" native-type="submit">保存</el-button>
+            </el-form-item>
+        </el-row>   
+    </el-form>  
+    <h1>试卷基本信息 </h1>
+    <!-- 试卷基本内容 -->
     <el-form label-width="120px" @submit.native.prevent="save">
         <el-form-item label="试卷标题" >
             <el-input v-model="model.name"></el-input>
@@ -19,40 +134,7 @@
         <el-form-item>
             <el-button type="primary" native-type="submit">保存</el-button>
         </el-form-item>
-    </el-form>
-
-    <el-form label-width="120px" @submit.native.prevent="saveQuestion" v-show="id">
-        <el-button type="text" @click="AddQuestions()"><i class="el-icon-plus"></i>添加题目</el-button>
-        <el-row type="flex" style="flex-wrap:wrap;">
-            <el-col :md="12" v-for="(question,i) in questions" :key="i">
-                <el-form-item label="题目内容" >
-                    <el-input v-model="question.name"></el-input>
-                </el-form-item>
-                <el-form-item label="题目分类" >
-                    <el-select v-model="question.categories" multiple>
-                        <el-option v-for="item in categories" :key="item._id"
-                        :label="item.name" :value="item._id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-button type="text" @click="question.answers.push({})"><i class="el-icon-plus"></i>添加选项</el-button>
-                <el-row type="flex" style="flex-wrap:wrap;">
-                    <el-col :md="12" v-for="(item,i) in question.answers" :key="i">
-                        <el-form-item label="名称">
-                            <el-input v-model="item.name"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-form-item label="正确选项">
-                    <el-input v-model="question.right"></el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>   
-        
-        <el-form-item>
-            <el-button type="primary" native-type="submit">保存</el-button>
-        </el-form-item>
-    </el-form>
+    </el-form>  
   </div>
 </template>
 <script> 
@@ -64,27 +146,66 @@ export default {
         return {
             model:{
                 name:"",
-                questions:[],
+                ture_or_false:[], //判断题
+                single_choice:[], //单选题
+                multiple_choice:[],//不定项
+                subjective:[], //主观题
                 categories:[],
             },
-            questions:[{
-                name:"",
-                categories:[],
-                answers:[],
-                right:""
-            }],
+            // single_choice:[{
+            //     name:"",
+            //     categories:[],
+            //     answers:[],
+            //     right:""
+            // }],
+            ture_or_false:[], //判断题
+            single_choice:[], //单选题
+            multiple_choice:[],//不定项
+            subjective:[], //主观题
+
             questionChooes:[],
             categories:[]
         }
     },
     methods: {
-        AddQuestions(){
-            this.questions.push({
-                name:"",
-                categories:[],
-                answers:[],
-                right:""
-            })        
+        AddQuestions(id){
+            console.log(id)
+            switch (id){
+                case 0:
+                    this.single_choice.push({
+                        name:"",
+                        categories:"603101a15366ebf854108253",
+                        answers:[{},{},{},{}],
+                        right:""
+                    }) 
+                    break;  
+                case 1:
+                    this.multiple_choice.push({
+                        name:"",
+                        categories:"603e1f14d2f7244421f3df2b",
+                        answers:[{},{},{},{}],
+                        right:""
+                    }) 
+                    break;  
+                case 2:
+                    this.ture_or_false.push({
+                        name:"",
+                        categories:"603e1f31d2f7244421f3df2c",
+                        answers:[{},{}],
+                        right:""
+                    }) 
+                    break; 
+                case 3:
+                    this.subjective.push({
+                        name:"",
+                        categories:"603e1f85d2f7244421f3df2d",
+                        // answers:[{}],
+                        right:""
+                    }) 
+                    break; 
+                default:
+                    break;
+            }      
         },
         async save(){
             // let res
@@ -99,32 +220,40 @@ export default {
                 message:"保存试卷成功" 
             })
         },
-        async saveQuestion(){
-            console.log(this.questions[0])
-            // let questionList = []
-            if(!this.questions[0]._id){
-                for(let i=0;i<this.questions.length;i++){
-                    let a = await this.$http.post('/rest/questions',this.questions[i]);
-                    this.model.questions[i]=a.data._id;
+        async saveQuestion(data,id){
+            console.log(data)
+            const res = await this.$http.put('/questions/test',data);
+            res.data.forEach((value,index) => {
+                switch (id){
+                    case 0:
+                        this.model.single_choice[index] = value
+                        break;
+                    case 1:
+                        this.model.multiple_choice[index] = value
+                        break;  
+                    case 2:
+                        this.model.ture_or_false[index] = value
+                        break; 
+                    case 3:
+                        this.model.subjective[index] = value
+                        break; 
+                    default:
+                        break;
                 }
-            }else{
-                for(let i=0;i<this.questions.length;i++){
-                    await this.$http.put(`/rest/questions/${this.questions[i]._id}`,this.questions[i])
-                }
-            }
-            // this.$router.push('/tests/list')
+                
+            });
             this.$message({
                 type:"success",
                 message:"保存题目成功" 
             })
-            this.save()
         },
         async fetch(){
             const res = await this.$http.get(`/rest/tests/${this.id}`)
             this.model = res.data
-            this.questions = this.model.questions
-            console.log(this.model)
-            console.log(this.questions)
+            this.single_choice = this.model.single_choice
+            this.ture_or_false = this.model.ture_or_false
+            this.multiple_choice = this.model.multiple_choice
+            this.subjective = this.model.subjective
         },
         async fetchCategories(){
             const res = await this.$http.get(`/rest/categories`)

@@ -5,6 +5,7 @@ const schema = new mongoose.Schema({
     intro:{type:String},
     num:{type:String},
     qualification:{type:String},
+    time:[{type:Date}],
     start:{type:Date},
     end:{type:Date},
     department:{type:mongoose.SchemaTypes.ObjectId,ref:'Department'},
