@@ -109,7 +109,8 @@ module.exports = app =>{
     //首页获取部门以及岗位
     app.get('/admin/api/departments',async (req,res)=>{
         const data = await Department.aggregate([
-          {
+           
+            {
               //左外链接
               $lookup:{
                   //名字默认是模型名字的小写加复数，（模型第三个参数可以设定）
@@ -147,18 +148,36 @@ module.exports = app =>{
     })
     //通过用户id获取进度
     app.get('/admin/api/schedule/:id',authMiddleware(), async(req,res)=>{
-        let model = await Vitae.findOne(
-            {"user":req.params.id},
-            {"_id":1}
-            ).populate({
-            path: 'recruits',
-            select:"name",
-            populate: { path: 'test', select:["name","start","end"],}
-          }).lean()
-        if(model){
+        let queryOptions={}
+        queryOptions.populate={path:"recruits",recruits:{$exists: true}}
+        let model = await Vitae.findOne({"user":req.params.id}).setOptions(queryOptions).lean()
+        // model.recruits.forEach(async (value)=>{
+        //     if(value.test){
+        //         const a = await TestItem.findById(value.test,{name:1,time:1,id:1})
+        //         value.test = a
+                
+        //     }else{
+        //         value.test=""
+        //     }
+        // })
+       
+            
+        //     .populate({
+        //     path: 'recruits',
+        //     $exists: true,
+        //     select:"name",
+        //     // populate: { path: 'test:{$exists: true}', select:["name","start","end"],}
+        //   }).lean()
+        if(model.recruits){
             for(let i=0;i<model.recruits.length;i++){
+                if(model.recruits[i].test){
+                    model.recruits[i].test = await TestItem.findById(model.recruits[i].test,{name:1,time:1,id:1})
+                    model.recruits[i].answer = await Answer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
+                }else{
+                    value.test=""
+                }
                 // let list = await Recruit.findOne({_id:recruitsList[i]}).populate("test").lean()
-                model.recruits[i].answer = await Answer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
+                
                 // model.recruits[i] = list
                 // model.recruits[i] = await Recruit.findById(recruitsList[i])
             }

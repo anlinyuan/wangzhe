@@ -32,8 +32,8 @@ export default {
     methods:{
         async fetch(){
             const res = await this.$http.get('/rest/vitaes')
-            // const r = await this.$http.get("/schedule/603c77a7523f8d35c37ed1e6")
-            // console.log(r)
+            const r = await this.$http.get("/schedule/603c77a7523f8d35c37ed1e6")
+            console.log(r)
             // const r = await this.$http.get('search/questions/试卷1')
             // console.log(r)
             this.items = res.data

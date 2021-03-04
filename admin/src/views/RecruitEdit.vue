@@ -18,9 +18,17 @@
             </el-select>
         </el-form-item>
 
+
         <el-form-item label="考试" >
-            <el-input v-model="model.test"></el-input>
+            <el-select v-model="model.test" placeholder="请选择">
+                <el-option v-for="item in test" :key="item._id"
+                :label="item.name" :value="item._id">
+                </el-option>
+            </el-select>
         </el-form-item>
+        <!-- <el-form-item label="考试" >
+            <el-input v-model="model.test"></el-input>
+        </el-form-item> -->
 
                <el-form-item label="考试时间">
                     <el-date-picker
@@ -67,7 +75,8 @@ export default {
         return {
             model:{
             },
-            department:[]
+            department:[],
+            test:[]
         }
     },
     methods: {
@@ -99,6 +108,8 @@ export default {
         async fetchCategories(){
             const res = await this.$http.get(`/rest/departments`)
             this.department= res.data
+            const test = await this.$http.get(`/rest/test_items`)
+            this.test= test.data
         }
     },
     created(){

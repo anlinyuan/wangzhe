@@ -6,8 +6,8 @@ const schema = new mongoose.Schema({
     num:{type:String},
     qualification:{type:String},
     time:[{type:Date}],
-    start:{type:Date},
-    end:{type:Date},
+    // start:{type:Date},
+    // end:{type:Date},
     department:{type:mongoose.SchemaTypes.ObjectId,ref:'Department'},
     test:{type:mongoose.SchemaTypes.ObjectId,ref:'TestItem'}
 })
