@@ -13,6 +13,7 @@ module.exports = app =>{
     const TestItem = mongoose.model('TestItem')
     const Department = mongoose.model('Department')
     const Question = mongoose.model('Question')
+    const Ad = mongoose.model('Ad')
     // const Department = mongoose.model('Department')
 
     const AdminUser = require('../../models/AdminUser')
@@ -124,9 +125,9 @@ module.exports = app =>{
         ])
         res.send(data)
       })
-
-    app.get('/admin/api/:resource/list',resourceMiddleware(),async(req,res)=>{
-        const cats = await req.Model.find()
+    //轮播图
+    app.get('/admin/api/ads/list',async(req,res)=>{
+        const cats = await Ad.find()
         res.send(cats)
       })
     //岗位id获取人
@@ -155,23 +156,6 @@ module.exports = app =>{
         let queryOptions={}
         queryOptions.populate={path:"recruits",recruits:{$exists: true}}
         let model = await Vitae.findOne({"user":req.params.id},{id:1,recruits:1}).setOptions(queryOptions).lean()
-        // model.recruits.forEach(async (value)=>{
-        //     if(value.test){
-        //         const a = await TestItem.findById(value.test,{name:1,time:1,id:1})
-        //         value.test = a
-                
-        //     }else{
-        //         value.test=""
-        //     }
-        // })
-       
-            
-        //     .populate({
-        //     path: 'recruits',
-        //     $exists: true,
-        //     select:"name",
-        //     // populate: { path: 'test:{$exists: true}', select:["name","start","end"],}
-        //   }).lean()
         if(model.recruits){
             for(let i=0;i<model.recruits.length;i++){
                 if(model.recruits[i].test){
@@ -180,10 +164,6 @@ module.exports = app =>{
                 }else{
                     value.test=""
                 }
-                // let list = await Recruit.findOne({_id:recruitsList[i]}).populate("test").lean()
-                
-                // model.recruits[i] = list
-                // model.recruits[i] = await Recruit.findById(recruitsList[i])
             }
         }
         res.send(model)
