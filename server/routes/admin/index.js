@@ -150,7 +150,7 @@ module.exports = app =>{
     app.get('/admin/api/schedule/:id',authMiddleware(), async(req,res)=>{
         let queryOptions={}
         queryOptions.populate={path:"recruits",recruits:{$exists: true}}
-        let model = await Vitae.findOne({"user":req.params.id}).setOptions(queryOptions).lean()
+        let model = await Vitae.findOne({"user":req.params.id},{id:1,recruits:1}).setOptions(queryOptions).lean()
         // model.recruits.forEach(async (value)=>{
         //     if(value.test){
         //         const a = await TestItem.findById(value.test,{name:1,time:1,id:1})
