@@ -3,6 +3,9 @@
     <h1>{{id?"编辑":"新建"}}试卷 </h1>
     <!-- 单选 -->
     <el-form label-width="120px" @submit.native.prevent="saveQuestion(single_choice,0)" v-show="id">
+        <el-form-item label="单选题每题的分数" >
+            <el-input v-model="model.single_choice.score"></el-input>
+        </el-form-item>
         <el-button type="text" @click="AddQuestions(0)">
             <i class="el-icon-plus"></i>添加单选题
         </el-button>
@@ -33,6 +36,9 @@
     </el-form>
     <!-- 多选 -->
     <el-form label-width="120px" @submit.native.prevent="saveQuestion(multiple_choice,1)" v-show="id">
+        <el-form-item label="多选题每题的分数" >
+            <el-input v-model="model.multiple_choice.score"></el-input>
+        </el-form-item>
         <el-button type="text" @click="AddQuestions(1)">
             <i class="el-icon-plus"></i>添加多选题
         </el-button>
@@ -63,6 +69,9 @@
     </el-form>
     <!-- 判断 -->
     <el-form label-width="120px" @submit.native.prevent="saveQuestion(ture_or_false,2)" v-show="id">
+        <el-form-item label="判断题每题的分数" >
+            <el-input v-model="model.ture_or_false.score"></el-input>
+        </el-form-item>
         <el-button type="text" @click="AddQuestions(2)">
             <i class="el-icon-plus"></i>添加判断题
         </el-button>
@@ -93,6 +102,9 @@
     </el-form>
     <!-- 主观 -->
     <el-form label-width="120px" @submit.native.prevent="saveQuestion(subjective,3)" v-show="id">
+        <el-form-item label="主观题每题的分数" >
+            <el-input v-model="model.subjective.score"></el-input>
+        </el-form-item>
         <el-button type="text" @click="AddQuestions(3)">
             <i class="el-icon-plus"></i>添加主观题
         </el-button>
@@ -127,6 +139,13 @@
                 </el-option>
             </el-select>
         </el-form-item>
+        <el-form-item label="创建者" >
+            <el-select v-model="model.author">
+                <el-option v-for="item in admin" :key="item._id"
+                :label="item.username" :value="item._id">
+                </el-option>
+            </el-select>
+        </el-form-item>
         <el-form-item label="是否公开试卷" >
             <el-radio v-model="model.public" label="0">公开</el-radio>
             <el-radio v-model="model.public" label="1">私密</el-radio>
@@ -146,10 +165,22 @@ export default {
         return {
             model:{
                 name:"",
-                ture_or_false:[], //判断题
-                single_choice:[], //单选题
-                multiple_choice:[],//不定项
-                subjective:[], //主观题
+                ture_or_false:{
+                    score:"",
+                    id:[]
+                }, //判断题
+                single_choice:{
+                    score:"",
+                    id:[]
+                }, //单选题
+                multiple_choice:{
+                    score:"",
+                    id:[]
+                },//不定项
+                subjective:{
+                    score:"",
+                    id:[]
+                }, //主观题
                 categories:[],
             },
             // single_choice:[{
@@ -164,7 +195,8 @@ export default {
             subjective:[], //主观题
 
             questionChooes:[],
-            categories:[]
+            categories:[],
+            admin:[],
         }
     },
     methods: {
@@ -221,26 +253,27 @@ export default {
             })
         },
         async saveQuestion(data,id){
-            console.log(data)
+            console.log(id)
             const res = await this.$http.put('/questions/test',data);
+            console.log(res)
             res.data.forEach((value,index) => {
                 switch (id){
                     case 0:
-                        this.model.single_choice[index] = value
+                        this.model.single_choice.id[index] = value
                         break;
                     case 1:
-                        this.model.multiple_choice[index] = value
+                        this.model.multiple_choice.id[index] = value
                         break;  
                     case 2:
-                        this.model.ture_or_false[index] = value
+                        this.model.ture_or_false.id[index] = value
                         break; 
                     case 3:
-                        this.model.subjective[index] = value
+                        this.model.subjective.id[index] = value
                         break; 
                     default:
                         break;
                 }
-                
+                // console.log(value)
             });
             this.$message({
                 type:"success",
@@ -250,14 +283,17 @@ export default {
         async fetch(){
             const res = await this.$http.get(`/rest/tests/${this.id}`)
             this.model = res.data
-            this.single_choice = this.model.single_choice
-            this.ture_or_false = this.model.ture_or_false
-            this.multiple_choice = this.model.multiple_choice
-            this.subjective = this.model.subjective
+            console.log(this.model)
+            this.single_choice = this.model.single_choice.id
+            this.ture_or_false = this.model.ture_or_false.id
+            this.multiple_choice = this.model.multiple_choice.id
+            this.subjective = this.model.subjective.id
         },
         async fetchCategories(){
             const res = await this.$http.get(`/rest/categories`)
             this.categories = res.data
+            const admin = await this.$http.get('/rest/admin_users')
+            this.admin = admin.data
         }
     },
     created(){

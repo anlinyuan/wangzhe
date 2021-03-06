@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>试卷列表</h1>
+        <h1>考试列表</h1>
         <el-table :data="items">
             <el-table-column prop="_id" label="ID" width="240">
             </el-table-column>
@@ -15,6 +15,8 @@
                 <template slot-scope="scope">
                 <el-button type="text" size="small"
                 @click="$router.push(`/test_items/edit/${scope.row._id}`)">编辑</el-button>
+                <el-button type="text" size="small"
+                @click="$router.push({path:`/answers/create`, query: {testitem_id:scope.row._id}})">作答</el-button>
                 <el-button type="text" size="small"
                 @click="remove(scope.row)">删除</el-button>
                 </template>

@@ -6,7 +6,9 @@
             </el-table-column>
             <!-- <el-table-column prop="parent.name" label="上级分类">
             </el-table-column> -->
-            <el-table-column prop="name" label="姓名">
+            <el-table-column prop="name" label="简历姓名">
+            </el-table-column>
+            <el-table-column prop="user.username" label="用户名">
             </el-table-column>
             <el-table-column
             fixed="right"
@@ -32,10 +34,10 @@ export default {
     methods:{
         async fetch(){
             const res = await this.$http.get('/rest/vitaes')
-            // const r = await this.$http.get("/schedule/603c77a7523f8d35c37ed1e6")
+            // const r = await this.$http.get("/schedule/603c3f4890ae292baf6e402b")
             // console.log(r)
-            const r = await this.$http.get('/recruit_item/6033a654738abd0d7be871de')
-            console.log(r)
+            // const r = await this.$http.get('/recruit_item/603c3f4890ae292baf6e402b')
+            // console.log(r)
             this.items = res.data
             
         },

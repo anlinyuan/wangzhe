@@ -6,6 +6,8 @@
             </el-table-column>
             <el-table-column prop="name" label="岗位名称">
             </el-table-column>
+            <el-table-column prop="department.name" label="所属部门">
+            </el-table-column>
             <el-table-column prop="intro" label="岗位信息">
             </el-table-column>
             <el-table-column

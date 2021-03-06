@@ -5,15 +5,29 @@
         <el-form-item label="考试名称" >
             <el-input v-model="model.name"></el-input>
         </el-form-item>
-
-        <el-form-item label="试卷ID" >
-            <el-input v-model="model.test"></el-input>
+        <el-form-item label="创建者" >
+            <el-select v-model="model.author">
+                <el-option v-for="item in admin" :key="item._id"
+                :label="item.username" :value="item._id">
+                </el-option>
+            </el-select>
         </el-form-item>
+        <el-form-item label="选择试卷" >
+            <el-select v-model="model.test">
+                <el-option v-for="item in testList" :key="item._id"
+                :label="item.name" :value="item._id">
+                </el-option>
+            </el-select>
+        </el-form-item>
+
+        <!-- <el-form-item label="试卷ID" >
+            <el-input v-model="model.test"></el-input>
+        </el-form-item> -->
 
                 <el-form-item label="考试时间">
                     <el-date-picker
                     v-model="model.time"
-                    type="daterange"
+                    type="datetimerange"
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
@@ -79,10 +93,10 @@ export default {
                 recruit:"",
                 start:"",
                 test:"",
-                _id:"",
             },
             recruit:[],
-            testList:[]
+            testList:[],
+            admin:[]
         }
     },
     methods: {
@@ -116,6 +130,8 @@ export default {
             const test = await this.$http.get(`/rest/tests`)
             this.testList = test.data
             console.log(this.testList)
+            const admin = await this.$http.get('/rest/admin_users')
+            this.admin = admin.data
         }
     },
     created(){

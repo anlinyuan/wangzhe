@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
     time:[{type:Date}],
     // start:{type:Date},
     // end:{type:Date},
-    recruit:{type:mongoose.SchemaTypes.ObjectId,ref:'Recruit'}
+    recruit:{type:mongoose.SchemaTypes.ObjectId,ref:'Recruit'},
+    author:{type:mongoose.SchemaTypes.ObjectId,ref:'AdminUser'}
 })
 module.exports = mongoose.model('TestItem',schema)

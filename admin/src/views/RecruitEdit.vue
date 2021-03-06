@@ -30,7 +30,7 @@
             <el-input v-model="model.test"></el-input>
         </el-form-item> -->
 
-               <el-form-item label="考试时间">
+               <el-form-item label="招聘时间">
                     <el-date-picker
                     v-model="model.time"
                     type="daterange"

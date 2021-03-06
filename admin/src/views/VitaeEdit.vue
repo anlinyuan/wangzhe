@@ -12,9 +12,16 @@
         <el-form-item label="名字" >
             <el-input v-model="model.name"></el-input>
         </el-form-item>
-        <el-form-item label="用户id" >
-            <el-input v-model="model.user"></el-input>
+        <el-form-item label="用户" >
+            <el-select v-model="model.user">
+                <el-option v-for="item in admin" :key="item._id"
+                :label="item.username" :value="item._id">
+                </el-option>
+            </el-select>
         </el-form-item>
+        <!-- <el-form-item label="用户id" >
+            <el-input v-model="model.user"></el-input>
+        </el-form-item> -->
         <el-form-item label="学号" >
             <el-input v-model="model.student_id"></el-input>
         </el-form-item>
@@ -88,8 +95,14 @@
                     <el-input v-model="item.awards_name"></el-input>
                 </el-form-item>
 
+
                 <el-form-item label="获奖时间">
-                    <el-input v-model="item.awards_time"></el-input>
+                    <el-date-picker
+                        v-model="item.awards_time"
+                        type="date"
+                        placeholder="选择日期">
+                    </el-date-picker>
+                    <!-- <el-input v-model="item.awards_time"></el-input> -->
                 </el-form-item>
 
                 <el-form-item label="获奖详情">
@@ -135,7 +148,8 @@ export default {
             },
             parents:[],
             recruits:[],
-            choose_recruits:[]
+            choose_recruits:[],
+            admin:[]
         }
     },
     methods: {
@@ -172,6 +186,8 @@ export default {
         async fetchCategories(){
             const res = await this.$http.get(`/rest/recruits`)
             this.recruits = res.data
+            const admin = await this.$http.get('/rest/admin_users')
+            this.admin = admin.data
         }
     },
     created(){

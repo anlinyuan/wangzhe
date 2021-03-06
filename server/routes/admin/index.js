@@ -75,6 +75,10 @@ module.exports = app =>{
             queryOptions.populate = "categories"
         }else if(req.Model.modelName==="Answer"){
             queryOptions.populate = "test_item test"
+        }else if(req.Model.modelName==="Recruit"){
+            queryOptions.populate = "department"
+        }else if(req.Model.modelName==="Vitae"){
+            queryOptions.populate = "user"
         }
         const items = await req.Model.find().setOptions(queryOptions).limit(100)
         res.send(items)
@@ -84,9 +88,27 @@ module.exports = app =>{
     router.get('/:id',async(req,res)=>{
         let queryOptions={}
         if(req.Model.modelName==="Test"){
-            queryOptions.populate = "ture_or_false single_choice multiple_choice subjective"
+            queryOptions.populate = "ture_or_false.id single_choice.id multiple_choice.id subjective.id"
         }else if(req.Model.modelName==="TestItem"){
-            queryOptions.populate = "test recruit"
+            queryOptions.populate = [{
+                path:"test",
+                populate:{
+                    path:"ture_or_false.id single_choice.id multiple_choice.id subjective.id"
+                }
+            },{
+                path:"recruit"
+            }
+                // "test recruit"
+            ]
+        }
+        else if(req.Model.modelName==="Answer"){
+            queryOptions.populate = {
+                path:"test",
+                populate:{
+                    path:"ture_or_false.id single_choice.id multiple_choice.id subjective.id"
+                }
+            }
+            
         }
         const model = await req.Model.findById(req.params.id).setOptions(queryOptions)
         res.send(model)
@@ -154,7 +176,7 @@ module.exports = app =>{
     //通过用户id获取进度
     app.get('/admin/api/schedule/:id',authMiddleware(), async(req,res)=>{
         let queryOptions={}
-        queryOptions.populate={path:"recruits",recruits:{$exists: true}}
+        queryOptions.populate="recruits"
         let model = await Vitae.findOne({"user":req.params.id},{id:1,recruits:1}).setOptions(queryOptions).lean()
         if(model.recruits){
             for(let i=0;i<model.recruits.length;i++){
@@ -162,7 +184,7 @@ module.exports = app =>{
                     model.recruits[i].test = await TestItem.findById(model.recruits[i].test,{name:1,time:1,id:1})
                     model.recruits[i].answer = await Answer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
                 }else{
-                    value.test=""
+                    model.recruits[i].test=""
                 }
             }
         }

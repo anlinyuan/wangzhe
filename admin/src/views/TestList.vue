@@ -16,6 +16,8 @@
                 <el-button type="text" size="small"
                 @click="$router.push(`/tests/edit/${scope.row._id}`)">编辑</el-button>
                 <el-button type="text" size="small"
+                @click="$router.push({path:`/answers/create`, query: {test_id: scope.row._id}})">作答</el-button>
+                <el-button type="text" size="small"
                 @click="remove(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
