@@ -113,7 +113,7 @@ module.exports = app =>{
         const model = await req.Model.findById(req.params.id).setOptions(queryOptions)
         res.send(model)
     })
-
+    //修改试卷的题目
     app.put('/admin/api/questions/test',authMiddleware(),async(req,res)=>{
         let model = [],a={},b={};
         for(let i=0;i<req.body.length;i++){
@@ -176,7 +176,14 @@ module.exports = app =>{
     //通过用户id获取进度
     app.get('/admin/api/schedule/:id',authMiddleware(), async(req,res)=>{
         let queryOptions={}
-        queryOptions.populate="recruits"
+        queryOptions.populate={
+            path:"recruits",
+            populate:{
+                path:"department",
+                select:"name"
+            }
+        }
+        
         let model = await Vitae.findOne({"user":req.params.id},{id:1,recruits:1}).setOptions(queryOptions).lean()
         if(model.recruits){
             for(let i=0;i<model.recruits.length;i++){
