@@ -38,8 +38,14 @@ export default {
                 console.log(1)
             }
             const res = await this.$http.get('/rest/vitaes')
-            const r = await this.$http.post("/questions/num",{
+            const r = await this.$http.post("/questions",{
                 // category_id:"603101a15366ebf854108253",
+                keyword:"下列",
+                // last_id:"6045d505f3103202e2f0509d",
+                from:3,
+                to:1,
+                num:2,
+                admin:1,
             })
             console.log(r)
             // const r = await this.$http.get('/recruit_item/603c3f4890ae292baf6e402b')

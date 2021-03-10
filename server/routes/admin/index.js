@@ -219,6 +219,11 @@ module.exports = app =>{
     app.post('/admin/api/:resource',authMiddleware(), resourceMiddleware(),async(req,res)=>{
         let findOption={},num,page,flag=1;
         num = req.body.num;
+        if(req.body.keyword){
+            const keyword = req.body.keyword
+            const reg = new RegExp(keyword, 'i')
+            findOption.name={$regex : reg}
+        }
         if(req.Model.modelName==="Test" && req.body.admin==0){
             findOption.public = req.body.admin
         }
@@ -245,13 +250,28 @@ module.exports = app =>{
 
 
     //通过关键词搜索题目或试卷
-    app.get('/admin/api/search/:resource/:keyword',authMiddleware(), resourceMiddleware(),async(req,res)=>{
-        const keyword = req.params.keyword
-        const reg = new RegExp(keyword, 'i') //不区分大小写
-        const model = await req.Model.find(
-            {name:{$regex : reg}})
-        res.send(model)
-    })
+    // app.post('/admin/api/search/:resource',authMiddleware(), resourceMiddleware(),async(req,res)=>{
+    //     const keyword = req.body.keyword
+    //     const reg = new RegExp(keyword, 'i') //不区分大小写
+    //     let findOption={},num,page,flag=1
+    //     findOption.name={$regex : reg}
+    //     num = req.body.num;
+    //     if(req.Model.modelName==="Test" && req.body.admin==0){
+    //         findOption.public = req.body.admin
+    //     }
+    //     if(req.body.last_id){
+    //         if(req.body.to>req.body.from){
+    //             page = req.body.to-req.body.from-1
+    //             findOption._id = {"$gt": req.body.last_id}
+    //         }else{
+    //             page = req.body.from - req.body.to-1
+    //             flag = -1
+    //             findOption._id = {"$lt": req.body.last_id}
+    //         }
+    //     }
+    //     const model = await req.Model.find(findOption)
+    //     res.send(model)
+    // })
 
     //上传数据
     const multer = require('multer')
