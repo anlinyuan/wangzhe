@@ -201,8 +201,21 @@ module.exports = app =>{
     })
 
 
-    //分页获取题目
-    //通过分类id获取题目
+    //分页获取题目，试卷
+    //获取题目，试卷的条数
+    app.post('/admin/api/:resource/num',authMiddleware(), resourceMiddleware(),async(req,res)=>{
+        let findOption={};
+        num = req.body.num;
+        if(req.Model.modelName==="Test" && req.body.admin==0){
+            findOption.public = req.body.admin
+        }
+        if(req.body.category_id){
+            findOption.categories = req.body.category_id
+        }
+        let model = await req.Model.find(findOption).count()
+        res.send(model)
+    })
+    //通过分类id获取题目，试卷
     app.post('/admin/api/:resource',authMiddleware(), resourceMiddleware(),async(req,res)=>{
         let findOption={},num,page,flag=1;
         num = req.body.num;
