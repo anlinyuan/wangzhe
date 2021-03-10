@@ -216,7 +216,7 @@ module.exports = app =>{
         res.send(model)
     })
     //通过分类id获取题目，试卷
-    app.post('/admin/api/:resource',authMiddleware(), resourceMiddleware(),async(req,res)=>{
+    app.post('/admin/api/search/:resource',authMiddleware(), resourceMiddleware(),async(req,res)=>{
         let findOption={},num,page,flag=1;
         num = req.body.num;
         if(req.body.keyword){
