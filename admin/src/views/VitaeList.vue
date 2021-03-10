@@ -33,8 +33,19 @@ export default {
     },
     methods:{
         async fetch(){
+            let i=[]
+            if(i.length!=0){
+                console.log(1)
+            }
             const res = await this.$http.get('/rest/vitaes')
-            const r = await this.$http.get("/schedule/6033a108a907570d02aebfcd")
+            const r = await this.$http.post("/questions",{
+                category_id:"603101a15366ebf854108253",
+                // last_id:"6045d505f3103202e2f0509d",
+                from:3,
+                to:1,
+                num:2,
+                admin:1,
+            })
             console.log(r)
             // const r = await this.$http.get('/recruit_item/603c3f4890ae292baf6e402b')
             // console.log(r)

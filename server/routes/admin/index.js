@@ -37,18 +37,19 @@ module.exports = app =>{
 
     //创建资源
     router.post('/',async(req,res)=>{
-        let model={}
-        if(req.Model.modelName==="Question"){
-            req.body.forEach(async (value) => {
-                if(value._id){
-                    await req.Model.findByIdAndUpdate(value._id,value)
-                }else{
-                    model = await req.Model.create(value)
-                }
-            });
-        }else{
-            model = await req.Model.create(req.body)
-        }
+        // let model={}
+        // if(req.Model.modelName==="Question"){
+        //     req.body.forEach(async (value) => {
+        //         if(value._id){
+        //             await req.Model.findByIdAndUpdate(value._id,value)
+        //         }else{
+        //             model = await req.Model.create(value)
+        //         }
+        //     });
+        // }else{
+            
+        // }
+        const model = await req.Model.create(req.body)
         res.send(model)
     })
     //删除资源
@@ -190,7 +191,8 @@ module.exports = app =>{
                 if(model.recruits[i].test){
                     model.recruits[i].test = await TestItem.findById(model.recruits[i].test,{name:1,time:1,id:1})
                     model.recruits[i].answer = await Answer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
-                }else{
+                }
+                else{
                     model.recruits[i].test=""
                 }
             }
@@ -199,13 +201,32 @@ module.exports = app =>{
     })
 
 
+    //分页获取题目
     //通过分类id获取题目
-    app.get('/admin/api/:resource/:id',authMiddleware(), resourceMiddleware(),async(req,res)=>{
-        let model = await req.Model.find({"categories":req.params.id}).populate({
+    app.post('/admin/api/:resource',authMiddleware(), resourceMiddleware(),async(req,res)=>{
+        let findOption={},num,page,flag=1;
+        num = req.body.num;
+        if(req.Model.modelName==="Test" && req.body.admin==0){
+            findOption.public = req.body.admin
+        }
+        if(req.body.category_id){
+            findOption.categories = req.body.category_id
+        }
+        if(req.body.last_id){
+            if(req.body.to>req.body.from){
+                page = req.body.to-req.body.from-1
+                findOption._id = {"$gt": req.body.last_id}
+            }else{
+                page = req.body.from - req.body.to-1
+                flag = -1
+                findOption._id = {"$lt": req.body.last_id}
+            }
+        }
+        let model = await req.Model.find(findOption).sort({"_id":flag}).skip(page*num).populate({
             path: 'categories',
-            select:"name",
-            populate: { path: 'parent', select:"name"}
-          })
+            select:"name _id",
+            // populate: { path: 'parent', select:"name"}
+          }).limit(num)
         res.send(model)
     })
 
