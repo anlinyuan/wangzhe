@@ -11,6 +11,7 @@ module.exports = app =>{
     const Recruit = mongoose.model('Recruit')
     const Answer = mongoose.model('Answer')
     const TestItem = mongoose.model('TestItem')
+    const Test = mongoose.model('Test')
     const Department = mongoose.model('Department')
     const Question = mongoose.model('Question')
     const Ad = mongoose.model('Ad')
@@ -85,6 +86,12 @@ module.exports = app =>{
         res.send(items)
     })
 
+    app.get('/admin/api/tests/test/:id',async(req,res)=>{
+        let queryOptions={}
+        queryOptions.populate = "ture_or_false.id single_choice.id multiple_choice.id subjective.id"
+        const model = await Test.findById(req.params.id).setOptions(queryOptions)
+        res.send(model)
+    })
     //获取特定资源
     router.get('/:id',async(req,res)=>{
         let queryOptions={}
@@ -235,16 +242,22 @@ module.exports = app =>{
                 page = req.body.to-req.body.from-1
                 findOption._id = {"$gt": req.body.last_id}
             }else{
-                page = req.body.from - req.body.to-1
-                flag = -1
+                // page = req.body.from - req.body.to-1
+                // flag = -1
+                page = 0
                 findOption._id = {"$lt": req.body.last_id}
             }
         }
-        let model = await req.Model.find(findOption).sort({"_id":flag}).skip(page*num).populate({
-            path: 'categories',
-            select:"name _id",
-            // populate: { path: 'parent', select:"name"}
-          }).limit(num)
+        // let model = await req.Model.find(findOption).sort({"_id":flag}).skip(page*num).populate({
+        //     path: 'categories',
+        //     select:"name _id",
+        //     // populate: { path: 'parent', select:"name"}
+        //   }).limit(num)
+        let model = await req.Model.find(findOption).sort({"_id":flag}).populate({
+                path: 'categories',
+                select:"name _id",
+                // populate: { path: 'parent', select:"name"}
+              }).limit(num)
         res.send(model)
     })
 
