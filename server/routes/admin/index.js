@@ -292,11 +292,13 @@ module.exports = app =>{
     //dirname绝对地址
     const upload = multer({ 
         // dest:__dirname+'/../../uploads'
+//         LTAI4G3c2Ttoom8U3qhV3yAA
+// Qw3lSXXXegZVykNnEbu68C7QPFLprz
         storage:MAO({
             config:{
                 region:"oss-cn-shenzhen",
-                accessKeyId:"LTAI4GGTwB9nFWsyQMer1vYb",
-                accessKeySecret:"TNA7rUOUmhzE0HNLGcU9fgrkh0tiL0",
+                accessKeyId:"LTAI4G3c2Ttoom8U3qhV3yAA",
+                accessKeySecret:"Qw3lSXXXegZVykNnEbu68C7QPFLprz",
                 bucket:"wangzhe-ly"
             }
         })
