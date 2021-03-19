@@ -382,9 +382,9 @@ module.exports = app =>{
         let info = await transporter.sendMail({
             from:'"数据挖掘实验室" <20171003243@gdufs.edu.cn>',
             to:email,
-            subject:req.body.recruit_id==0?thank_title:pass_title,
+            subject:req.body.recruit_id==1?pass_title:thank_title,
             text:"内容",
-            html:req.body.recruit_id==0?thank_mail:pass_mail
+            html:req.body.recruit_id==1?pass_mail:thank_mail
         })
         res.send(info)
     })
