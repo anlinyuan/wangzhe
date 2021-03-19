@@ -4,6 +4,8 @@ module.exports = app =>{
     const jwt  = require('jsonwebtoken')
     //npm i http-assert 错误处理
     const assert = require('http-assert')
+    const nodemailer  = require("nodemailer");
+    const moment = require('moment');
 
     const mongoose = require('mongoose')
     const Category = mongoose.model('Category')
@@ -105,9 +107,7 @@ module.exports = app =>{
                 }
             },{
                 path:"recruit"
-            }
-                // "test recruit"
-            ]
+            }]
         }
         else if(req.Model.modelName==="Answer"){
             queryOptions.populate = {
@@ -116,7 +116,8 @@ module.exports = app =>{
                     path:"ture_or_false.id single_choice.id multiple_choice.id subjective.id"
                 }
             }
-            
+        }else if(req.Model.modelName==="Vitae"){
+            queryOptions.populate="recruits"
         }
         const model = await req.Model.findById(req.params.id).setOptions(queryOptions)
         res.send(model)
@@ -125,6 +126,9 @@ module.exports = app =>{
     app.put('/admin/api/questions/test',authMiddleware(),async(req,res)=>{
         let model = [],a={},b={};
         for(let i=0;i<req.body.length;i++){
+            if(Array.prototype.isPrototypeOf(req.body[i].right)){
+                req.body[i].right = req.body[i].right.join(",")
+            }
             if(req.body[i]._id){
                 b=await Question.findByIdAndUpdate(req.body[i]._id,req.body[i])
                 model.push(b)
@@ -163,17 +167,21 @@ module.exports = app =>{
     //岗位id获取人
     app.get('/admin/api/recruit_item/:id',authMiddleware(), async(req,res)=>{
         let model = await Vitae.find({"recruits":req.params.id})
-        let a = await TestItem.find({recruit:req.params.id},{_id:1,name:1,time:1})
+        let a = await Recruit.findOne({"_id":req.params.id},{_id:1,name:1,time:1}).populate({
+            path: 'test',
+            // select:"name _id",
+            // populate: { path: 'parent', select:"name"}
+          })
         let b=[]
         for(let i=0;i<model.length;i++){
             b.push({})
             b[i].name = model[i].name;
             b[i].vitae = model[i]._id;
             b[i].user_id = model[i].user;
-            b[i].test_answer = await Answer.findOne({"user":model[i].user,"test_item":a._id},{pass:1,score:1,_id:1})
-            b[i].test_item = a
+            b[i].test_answer = await Answer.findOne({"user":model[i].user,"test_item":a.test._id},{pass:1,score:1,_id:1,accept:1})
+            b[i].test_item = a.test
         }
-       
+        // let c = await Answer.find({"test_item":"60438f983100f0798a5d6e27"},{pass:1,score:1,_id:1})
         res.send(b)
     })
     //通过用户id获取简历
@@ -262,29 +270,124 @@ module.exports = app =>{
     })
 
 
-    //通过关键词搜索题目或试卷
-    // app.post('/admin/api/search/:resource',authMiddleware(), resourceMiddleware(),async(req,res)=>{
-    //     const keyword = req.body.keyword
-    //     const reg = new RegExp(keyword, 'i') //不区分大小写
-    //     let findOption={},num,page,flag=1
-    //     findOption.name={$regex : reg}
-    //     num = req.body.num;
-    //     if(req.Model.modelName==="Test" && req.body.admin==0){
-    //         findOption.public = req.body.admin
-    //     }
-    //     if(req.body.last_id){
-    //         if(req.body.to>req.body.from){
-    //             page = req.body.to-req.body.from-1
-    //             findOption._id = {"$gt": req.body.last_id}
-    //         }else{
-    //             page = req.body.from - req.body.to-1
-    //             flag = -1
-    //             findOption._id = {"$lt": req.body.last_id}
-    //         }
-    //     }
-    //     const model = await req.Model.find(findOption)
-    //     res.send(model)
-    // })
+    //发送考试邮件
+    app.post('/admin/api/email',authMiddleware(),async(req,res)=>{
+        let email="",model,name="同学",recruit,test_name,
+        start_time=new Date(),
+        end_time=new Date()
+        if(req.body.vitae_id){
+            model = await Vitae.findById(req.body.vitae_id)
+            email = model.email
+            name = model.name
+        }else{
+            model = await Vitae.find({"recruits":req.body.recruit_id})
+            email = model[0].email
+            // email+=","
+            // email+=model[1].email
+            for(let i=1;i<model.length;i++){
+                email +=  "," + model[i].email
+            }
+        }
+        let recruit_data = await Recruit.findById(req.body.recruit_id).populate({
+            path: 'test',
+            select:"name time",
+          })
+        recruit = recruit_data.name
+        test_name = recruit_data.test.name
+        start_time = moment(recruit_data.test.time[0]).format('YYYY-MM-DD HH:mm:ss');
+        end_time = moment(recruit_data.test.time[1]).format('YYYY-MM-DD HH:mm:ss');
+        assert(email,422,"邮箱为空")        
+        let transporter = nodemailer.createTransport({
+            host:"smtp.gdufs.edu.cn",
+            port:25,
+            secure:false,
+            auth:{
+                user:"20171003243@gdufs.edu.cn",
+                pass:"691029538ada"
+            },
+            tls:{
+                rejectUnauthorized: false
+            }
+        });
+        let test_mail=`<h2>亲爱的${name}</h2>`
+        +`<p>感谢投递数据挖掘实验室${recruit}岗位，现邀请你参加在线笔试，笔试结果将作为进入面试的重要筛选条件。</p>`
+        +`<p>笔试名称：${test_name}</p>`
+        +`<p>考试时间：（北京时间）${start_time}————${end_time}</p>`
+        +`<p>详细信息请前往招聘网页的个人信息中查看</p>`
+        +`<p>如有疑问可咨询 20171003254@gdufs.edu.cn 黄同学</p>`
+        +`<p>祝你考试顺利！:-D</p>`
+        
+        let info = await transporter.sendMail({
+            from:'"数据挖掘实验室招新组" <20171003243@gdufs.edu.cn>',
+            to:email,
+            subject:"数据挖掘实验室笔试通知",
+            text:"内容",
+            html:test_mail
+        })
+        res.send(info)
+    })
+    //发送结果邮件
+    app.post('/admin/api/email/pass',authMiddleware(),async(req,res)=>{
+        let email="",name="同学",recruit,test_name,department,
+        start_time=new Date(),
+        end_time=new Date()
+        
+        let model = await Vitae.findById(req.body.vitae_id)
+        email = model.email
+        name = model.name
+        
+        let recruit_data = await Recruit.findById(req.body.recruit_id).populate({
+              path:"department",
+              select:"name"
+          })
+        recruit = recruit_data.name
+        // test_name = recruit_data.test.name
+        department = recruit_data.department.name
+        // start_time = moment(recruit_data.test.time[0]).format('YYYY-MM-DD HH:mm:ss');
+        // end_time = moment(recruit_data.test.time[1]).format('YYYY-MM-DD HH:mm:ss');
+        assert(email,422,"邮箱为空")        
+        let transporter = nodemailer.createTransport({
+            host:"smtp.gdufs.edu.cn",
+            port:25,
+            secure:false,
+            auth:{
+                user:"20171003243@gdufs.edu.cn",
+                pass:"691029538ada"
+            },
+            tls:{
+                rejectUnauthorized: false
+            }
+        });
+        let thank_title=`感谢投递数据挖掘实验室招聘！`
+        let thank_mail = `<h4>亲爱的${name}</h4>`
+                        +`<p>您好！感谢您对数据挖掘实验室招聘的关注，同时也感激您对数据挖掘实验室的热情投入。</p>`
+                        +`<p>我们很遗憾地通知您，在此次数据挖掘实验室招聘中，您投递的${recruit}岗位没有通过评估</p>`
+                        +`<p>您的简历将进入人才库，我们将持续为您匹配合适的岗位，期待与您在未来相遇！</p>`
+                        +`<p> 再次感谢您对数据挖掘实验室的关注！</p>`
+                        +`<p>详细信息请前往招聘网页的个人信息中查看</p>`
+                        +`<p>如有疑问可咨询 20171003254@gdufs.edu.cn 黄同学</p>`
+                        +`<p>此致</p>`
+                        +`<p>数据挖掘实验室招新组</p>`
+        let pass_title=`数据挖掘实验室招聘录用通知！`
+        let pass_mail = `<h4>亲爱的${name}</h4>`
+                        +`<p>您好！恭喜您通过数据挖掘实验室招聘全部流程！诚邀您加入数据挖掘实验室，具体信息如下：</p>`
+                        +`<p>录用部门：${department}</p>`
+                        +`<p>岗位：${recruit}</p>`
+                        +`<p>如接受offer，请您在收到offer后两天内到招聘网页的个人信息进行确认，谢谢！</p>`
+                        +`<p>详细信息请前往招聘网页的个人信息中查看</p>`
+                        +`<p>如有疑问可咨询 20171003254@gdufs.edu.cn 黄同学</p>`
+                        +`<p>此致</p>`
+                        +`<p>数据挖掘实验室招新组</p>`
+
+        let info = await transporter.sendMail({
+            from:'"数据挖掘实验室" <20171003243@gdufs.edu.cn>',
+            to:email,
+            subject:req.body.recruit_id==0?thank_title:pass_title,
+            text:"内容",
+            html:req.body.recruit_id==0?thank_mail:pass_mail
+        })
+        res.send(info)
+    })
 
     //上传数据
     const multer = require('multer')
@@ -295,6 +398,8 @@ module.exports = app =>{
         storage:MAO({
             config:{
                 region:"oss-cn-shenzhen",
+                accessKeyId:"LTAI4G3c2Ttoom8U3qhV3yAA",
+                accessKeySecret:"Qw3lSXXXegZVykNnEbu68C7QPFLprz",
                 bucket:"wangzhe-ly"
             }
         })

@@ -61,6 +61,12 @@
           <el-menu-item index="/questions/list">题目列表</el-menu-item>
         </el-menu-item-group>
         <el-menu-item-group>
+          <template slot="title">面试题</template>
+          <!-- index路径前面要/ -->
+          <el-menu-item index="/interviews/create">新增题目</el-menu-item>
+          <el-menu-item index="/interviews/list">题目列表</el-menu-item>
+        </el-menu-item-group>
+        <el-menu-item-group>
           <template slot="title">试卷</template>
           <!-- index路径前面要/ -->
           <el-menu-item index="/tests/create">新增试卷</el-menu-item>

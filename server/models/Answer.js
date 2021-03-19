@@ -28,6 +28,7 @@ const schema = new mongoose.Schema({
     // }],
     comment:{type:String},
     score:{type:String},
-    pass:{type:String}
+    pass:{type:String},
+    accept:{type:String}
 })
 module.exports = mongoose.model('Answer',schema)

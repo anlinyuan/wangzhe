@@ -16,14 +16,16 @@
                 </el-form-item>
                 <el-row type="flex" style="flex-wrap:wrap;">
                     <el-col :md="12" v-for="(item,i) in question.answers" :key="i">
-                        <el-form-item label="名称">
-                            <el-input v-model="item.name"></el-input>
+                        <el-form-item label="选项" label-width="100px">
+                            <el-radio v-model="question.right" :label="String(i)">
+                                <el-input v-model="item.name"></el-input>
+                            </el-radio>    
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="正确选项">
+                <!-- <el-form-item label="正确选项">
                     <el-input v-model="question.right"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item>
                     <el-button size="small" type="danger" 
                     @click="single_choice.splice(i,1)">删除</el-button>
@@ -48,15 +50,15 @@
                     <el-input v-model="question.name"></el-input>
                 </el-form-item>
                 <el-row type="flex" style="flex-wrap:wrap;">
-                    <el-col :md="12" v-for="(item,i) in question.answers" :key="i">
-                        <el-form-item label="名称">
-                            <el-input v-model="item.name"></el-input>
-                        </el-form-item>
-                    </el-col>
+                    <el-checkbox-group v-model="question.right">
+                        <el-checkbox v-for="(item,i) in question.answers" :key="i"
+                        :label="String(i)" style="margin-left:60px">
+                            <el-form-item label="选项" label-width="50px">
+                                    <el-input v-model="item.name"></el-input>
+                                </el-form-item>
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-row>
-                <el-form-item label="正确选项">
-                    <el-input v-model="question.right"></el-input>
-                </el-form-item>
                 <el-form-item>
                     <el-button size="small" type="danger" 
                     @click="multiple_choice.splice(i,1)">删除</el-button>
@@ -83,13 +85,18 @@
                 <el-row type="flex" style="flex-wrap:wrap;">
                     <el-col :md="12" v-for="(item,i) in question.answers" :key="i">
                         <el-form-item label="名称">
-                            <el-input v-model="item.name"></el-input>
+                            <el-radio v-model="question.right" :label="String(i)">
+                                <el-input v-model="item.name"></el-input>
+                            </el-radio>    
                         </el-form-item>
+                        <!-- <el-form-item label="名称">
+                            <el-input v-model="item.name"></el-input>
+                        </el-form-item> -->
                     </el-col>
                 </el-row>
-                <el-form-item label="正确选项">
+                <!-- <el-form-item label="正确选项">
                     <el-input v-model="question.right"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item>
                     <el-button size="small" type="danger" 
                     @click="ture_or_false.splice(i,1)">删除</el-button>
@@ -216,7 +223,7 @@ export default {
                         name:"",
                         categories:"603e1f14d2f7244421f3df2b",
                         answers:[{},{},{},{}],
-                        right:""
+                        right:[]
                     }) 
                     break;  
                 case 2:
@@ -254,8 +261,11 @@ export default {
         },
         async saveQuestion(data,id){
             console.log(id)
+            console.log(data)
             const res = await this.$http.put('/questions/test',data);
+            console.log("res")
             console.log(res)
+            
             res.data.forEach((value,index) => {
                 switch (id){
                     case 0:
@@ -274,7 +284,9 @@ export default {
                         break;
                 }
                 // console.log(value)
+           
             });
+         
             this.$message({
                 type:"success",
                 message:"保存题目成功" 
@@ -288,6 +300,10 @@ export default {
             this.ture_or_false = this.model.ture_or_false.id
             this.multiple_choice = this.model.multiple_choice.id
             this.subjective = this.model.subjective.id
+            for(let i=0;i<this.multiple_choice.length;i++){
+                this.multiple_choice[i].right = this.multiple_choice[i].right.split(",")
+            }
+            console.log(this.multiple_choice)
         },
         async fetchCategories(){
             const res = await this.$http.get(`/rest/categories`)

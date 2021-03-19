@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"node-vue-moba.interviews"}],"uuid":"67b48d6616ce43d1bf1fc4566e37a716"}

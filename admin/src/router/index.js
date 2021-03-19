@@ -41,6 +41,9 @@ import VitaeList from '../views/VitaeList.vue'
 
 import AnswerEdit from '../views/AnswerEdit.vue'
 import AnswerList from '../views/AnswerList.vue' 
+
+import InterviewEdit from '../views/InterviewEdit.vue'
+import InterviewList from '../views/InterviewList.vue' 
 Vue.use(Router)
 const router = new Router({
   routes: [
@@ -104,6 +107,10 @@ const router = new Router({
         {path:'/answers/create',component:AnswerEdit,},
         {path:'/answers/list',component:AnswerList},
         {path:'/answers/edit/:id',component:AnswerEdit,props:true},
+
+        {path:'/interviews/create',component:InterviewEdit,},
+        {path:'/interviews/list',component:InterviewList},
+        {path:'/interviews/edit/:id',component:InterviewEdit,props:true},
       ]
     },
   ]

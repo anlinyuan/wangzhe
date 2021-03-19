@@ -49,15 +49,26 @@ export default {
             //     num:2,
             //     admin:0,
             // })
-            const r = await this.$http.get("/rest/test_items/6043926b3100f0798a5d6e3f")
-            console.log(r)
+            
+            // const r = await this.$http.put(`/rest/answers/60439f9c5a4d347b25a5b152`,{
+            //     accept:0,
+            //     pass:0
+            // })
+            // console.log(r)
+
+            // const r = await this.$http.post("/email/pass",{
+            //     vitae_id:"60439e0c96b4d27aa38e92b9",
+            //     recruit_id:"60438f033100f0798a5d6e25",
+            //     pass:1
+            // })
+            // console.log(r)
             // const r = await this.$http.get('/recruit_item/603c3f4890ae292baf6e402b')
             // console.log(r)
             this.items = res.data
             
         },
         async remove(row){
-            this.$confirm(`是否删除简历${row.title}？`, '提示', {
+            this.$confirm(`是否删除 ${row.title} 简历？`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

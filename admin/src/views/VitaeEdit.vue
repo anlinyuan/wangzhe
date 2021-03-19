@@ -5,7 +5,7 @@
         <el-form-item label="选择岗位" >
             <el-select v-model="model.recruits" multiple>
                 <el-option v-for="item in recruits" :key="item._id"
-                :label="item.name" :value="item._id">
+                :label="item.name" :value="item._id" >
                 </el-option>
             </el-select>
         </el-form-item>
@@ -131,6 +131,7 @@
     </el-form>
   </div>
 </template>
+
 <script> 
 // import { VueEditor } from "vue2-editor";
 export default {
@@ -196,3 +197,9 @@ export default {
     }
 }
 </script>
+<style>
+.el-tag {
+  height: 100%;
+  white-space: normal;
+}
+</style>
