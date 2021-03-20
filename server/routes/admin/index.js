@@ -205,7 +205,7 @@ module.exports = app =>{
             for(let i=0;i<model.recruits.length;i++){
                 if(model.recruits[i].test){
                     model.recruits[i].test = await TestItem.findById(model.recruits[i].test,{name:1,time:1,id:1})
-                    model.recruits[i].answer = await Answer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1})
+                    model.recruits[i].answer = await Answer.findOne({"user":req.params.id,"test_item":model.recruits[i].test._id},{_id:1,pass:1,score:1,accept:1})
                 }
                 else{
                     model.recruits[i].test=""
@@ -250,8 +250,8 @@ module.exports = app =>{
                 page = req.body.to-req.body.from-1
                 findOption._id = {"$gt": req.body.last_id}
             }else{
-                // page = req.body.from - req.body.to-1
-                // flag = -1
+                page = req.body.from - req.body.to-1
+                flag = -1
                 page = 0
                 findOption._id = {"$lt": req.body.last_id}
             }
@@ -398,7 +398,8 @@ module.exports = app =>{
         storage:MAO({
             config:{
                 region:"oss-cn-shenzhen",
-                
+                accessKeyId:"LTAI4G3c2Ttoom8U3qhV3yAA",
+                accessKeySecret:"Qw3lSXXXegZVykNnEbu68C7QPFLprz",
                 bucket:"wangzhe-ly"
             }
         })

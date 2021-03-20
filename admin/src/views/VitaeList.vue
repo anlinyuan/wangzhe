@@ -38,22 +38,26 @@ export default {
                 console.log(1)
             }
             const res = await this.$http.get('/rest/vitaes')
-            // const r = await this.$http.post("/search/tests",{
-            //     // category_id:"603101a15366ebf854108253",
-            //     // keyword:"下列",
-            //     // last_id:"60499824897f85180767ba8f",//22
-            //     // last_id:"60499853897f85180767ba92",//55
-            //     last_id:"60499831897f85180767ba90",//33
-            //     from:3,
-            //     to:2,
-            //     num:2,
-            //     admin:0,
-            // })
-            
+            const r = await this.$http.post("/search/tests",{
+                // category_id:"603101a15366ebf854108253",
+                // keyword:"下列",
+                // last_id:"60499824897f85180767ba8f",//22
+                // last_id:"60499853897f85180767ba92",//55
+                last_id:"60499853897f85180767ba92",//33
+                from:5,
+                to:1,
+                num:1,
+                admin:0,
+            })
+            console.log(r)
             // const r = await this.$http.put(`/rest/answers/60439f9c5a4d347b25a5b152`,{
             //     accept:0,
             //     pass:0
             // })
+            // console.log(r)
+
+
+            // const r = await this.$http.get("/recruit_item/60438e1f5769d178e0e04d36")
             // console.log(r)
 
             // const r = await this.$http.post("/email/pass",{
