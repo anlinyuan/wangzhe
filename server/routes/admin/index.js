@@ -40,18 +40,6 @@ module.exports = app =>{
 
     //创建资源
     router.post('/',async(req,res)=>{
-        // let model={}
-        // if(req.Model.modelName==="Question"){
-        //     req.body.forEach(async (value) => {
-        //         if(value._id){
-        //             await req.Model.findByIdAndUpdate(value._id,value)
-        //         }else{
-        //             model = await req.Model.create(value)
-        //         }
-        //     });
-        // }else{
-            
-        // }
         const model = await req.Model.create(req.body)
         res.send(model)
     })
@@ -256,16 +244,17 @@ module.exports = app =>{
                 findOption._id = {"$lt": req.body.last_id}
             }
         }
-        // let model = await req.Model.find(findOption).sort({"_id":flag}).skip(page*num).populate({
-        //     path: 'categories',
-        //     select:"name _id",
-        //     // populate: { path: 'parent', select:"name"}
-        //   }).limit(num)
-        let model = await req.Model.find(findOption).sort({"_id":flag}).populate({
-                path: 'categories',
-                select:"name _id",
-                // populate: { path: 'parent', select:"name"}
-              }).limit(num)
+        let model = await req.Model.find(findOption).sort({"_id":flag}).skip(page*num).populate({
+            path: 'categories',
+            select:"name _id",
+            // populate: { path: 'parent', select:"name"}
+          }).limit(num)
+
+        // let model = await req.Model.find(findOption).sort({"_id":flag}).populate({
+        //         path: 'categories',
+        //         select:"name _id",
+        //         // populate: { path: 'parent', select:"name"}
+        //       }).limit(num)
         res.send(model)
     })
 
