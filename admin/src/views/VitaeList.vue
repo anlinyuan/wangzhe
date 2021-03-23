@@ -38,13 +38,14 @@ export default {
                 console.log(1)
             }
             const res = await this.$http.get('/rest/vitaes')
-            const r = await this.$http.post("/search/tests",{
+            const r = await this.$http.post("/search/questions",{
                 // category_id:"603101a15366ebf854108253",
                 // keyword:"下列",
+                // last_id:"604390093100f0798a5d6e28",//11
                 // last_id:"60499824897f85180767ba8f",//22
-                // last_id:"60499853897f85180767ba92",//55
-                last_id:"60499853897f85180767ba92",//33
-                from:5,
+                // last_id:"60499831897f85180767ba90",//t33
+                // last_id:"604391243100f0798a5d6e2e",//33
+                from:3,
                 to:1,
                 num:1,
                 admin:0,

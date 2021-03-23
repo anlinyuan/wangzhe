@@ -240,7 +240,6 @@ module.exports = app =>{
             }else{
                 page = req.body.from - req.body.to-1
                 flag = -1
-                page = 0
                 findOption._id = {"$lt": req.body.last_id}
             }
         }
@@ -249,12 +248,6 @@ module.exports = app =>{
             select:"name _id",
             // populate: { path: 'parent', select:"name"}
           }).limit(num)
-
-        // let model = await req.Model.find(findOption).sort({"_id":flag}).populate({
-        //         path: 'categories',
-        //         select:"name _id",
-        //         // populate: { path: 'parent', select:"name"}
-        //       }).limit(num)
         res.send(model)
     })
 
@@ -387,7 +380,8 @@ module.exports = app =>{
         storage:MAO({
             config:{
                 region:"oss-cn-shenzhen",
-                
+                accessKeyId:"LTAI4G3c2Ttoom8U3qhV3yAA",
+                accessKeySecret:"Qw3lSXXXegZVykNnEbu68C7QPFLprz",
                 bucket:"wangzhe-ly"
             }
         })
