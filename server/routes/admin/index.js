@@ -209,6 +209,11 @@ module.exports = app =>{
     app.post('/admin/api/:resource/num',authMiddleware(), resourceMiddleware(),async(req,res)=>{
         let findOption={};
         num = req.body.num;
+        if(req.body.keyword){
+            const keyword = req.body.keyword
+            const reg = new RegExp(keyword, 'i')
+            findOption.name={$regex : reg}
+        }
         if(req.Model.modelName==="Test" && req.body.admin==0){
             findOption.public = req.body.admin
         }
@@ -273,7 +278,7 @@ module.exports = app =>{
         let recruit_data = await Recruit.findById(req.body.recruit_id).populate({
             path: 'test',
             select:"name time",
-          })
+            })
         recruit = recruit_data.name
         test_name = recruit_data.test.name
         start_time = moment(recruit_data.test.time[0]).format('YYYY-MM-DD HH:mm:ss');
@@ -319,9 +324,9 @@ module.exports = app =>{
         name = model.name
         
         let recruit_data = await Recruit.findById(req.body.recruit_id).populate({
-              path:"department",
-              select:"name"
-          })
+                path:"department",
+                select:"name"
+            })
         recruit = recruit_data.name
         // test_name = recruit_data.test.name
         department = recruit_data.department.name
@@ -380,7 +385,8 @@ module.exports = app =>{
         storage:MAO({
             config:{
                 region:"oss-cn-shenzhen",
-               
+                accessKeyId:"LTAI4G3c2Ttoom8U3qhV3yAA",
+                accessKeySecret:"Qw3lSXXXegZVykNnEbu68C7QPFLprz",
                 bucket:"wangzhe-ly"
             }
         })
