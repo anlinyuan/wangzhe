@@ -38,19 +38,19 @@ export default {
                 console.log(1)
             }
             const res = await this.$http.get('/rest/vitaes')
-            const r = await this.$http.post("/search/questions",{
-                // category_id:"603101a15366ebf854108253",
-                // keyword:"下列",
-                // last_id:"604390093100f0798a5d6e28",//11
-                // last_id:"60499824897f85180767ba8f",//22
-                // last_id:"60499831897f85180767ba90",//t33
-                last_id:"604391243100f0798a5d6e2e",//33
-                from:3,
-                to:1,
-                num:1,
-                admin:0,
-            })
-            console.log(r)
+            // const r = await this.$http.post("/search/questions",{
+            //     // category_id:"603101a15366ebf854108253",
+            //     // keyword:"下列",
+            //     // last_id:"604390093100f0798a5d6e28",//11
+            //     // last_id:"60499824897f85180767ba8f",//22
+            //     // last_id:"60499831897f85180767ba90",//t33
+            //     last_id:"604391243100f0798a5d6e2e",//33
+            //     from:3,
+            //     to:1,
+            //     num:1,
+            //     admin:0,
+            // })
+            // console.log(r)
             // const r = await this.$http.put(`/rest/answers/60439f9c5a4d347b25a5b152`,{
             //     accept:0,
             //     pass:0
@@ -61,10 +61,9 @@ export default {
             // const r = await this.$http.get("/recruit_item/60438e1f5769d178e0e04d36")
             // console.log(r)
 
-            // const r = await this.$http.post("/email/pass",{
+            // const r = await this.$http.post("/email",{
             //     vitae_id:"60439e0c96b4d27aa38e92b9",
             //     recruit_id:"60438f033100f0798a5d6e25",
-            //     pass:1
             // })
             // console.log(r)
             // const r = await this.$http.get('/recruit_item/603c3f4890ae292baf6e402b')

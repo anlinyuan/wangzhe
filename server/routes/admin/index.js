@@ -385,7 +385,8 @@ module.exports = app =>{
         storage:MAO({
             config:{
                 region:"oss-cn-shenzhen",
-               
+                accessKeyId:"LTAI4G3c2Ttoom8U3qhV3yAA",
+                accessKeySecret:"Qw3lSXXXegZVykNnEbu68C7QPFLprz",
                 bucket:"wangzhe-ly"
             }
         })
@@ -451,5 +452,9 @@ module.exports = app =>{
         res.status(err.statusCode || 500).send({
           message: err.message
         })
-      })
+      }) 
+
+
+      
 }
+
